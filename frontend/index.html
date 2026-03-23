@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Music Streaming App</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+
+<body>
+
+<!-- AUTH SECTION -->
+<div id="auth-container">
+
+    <!-- LOGIN -->
+    <div id="login-page">
+
+        <h2>Login</h2>
+
+        <form id="login-form">
+
+            <input
+            type="email"
+            id="login-email"
+            placeholder="Email"
+            required>
+
+            <input
+            type="password"
+            id="login-password"
+            placeholder="Password"
+            required>
+
+            <button type="submit">
+            Login
+            </button>
+
+        </form>
+
+        <p>
+        Don't have an account?
+        <a href="#" id="show-register">Register</a>
+        </p>
+
+        <p>
+        <a href="#" id="show-forgot-password">Forgot Password?</a>
+        </p>
+
+    </div>
+
+
+    <!-- REGISTER -->
+    <div id="register-page" style="display:none;">
+
+        <h2>Create Account</h2>
+
+        <form id="register-form">
+
+            <input
+            type="text"
+            id="register-name"
+            placeholder="Name"
+            required>
+
+            <input
+            type="email"
+            id="register-email"
+            placeholder="Email"
+            required>
+
+            <input
+            type="password"
+            id="register-password"
+            placeholder="Password"
+            required>
+
+            <button type="submit">
+            Register
+            </button>
+
+        </form>
+
+        <p>
+        Already have an account?
+        <a href="#" id="show-login">Login</a>
+        </p>
+
+    </div>
+
+    <!-- FORGOT PASSWORD -->
+    <div id="forgot-password-page" style="display:none;">
+
+        <h2>Forgot Password</h2>
+
+        <p>Enter your email to receive an OTP.</p>
+
+        <form id="forgot-password-form">
+
+            <input
+            type="email"
+            id="forgot-email"
+            placeholder="Email"
+            required>
+
+            <button type="submit">
+            Send OTP
+            </button>
+
+        </form>
+
+        <p>
+        Remember your password?
+        <a href="#" id="show-login-from-forgot">Login</a>
+        </p>
+
+    </div>
+
+    <!-- VERIFY OTP -->
+    <div id="verify-otp-page" style="display:none;">
+
+        <h2>Verify OTP</h2>
+
+        <p>Enter the OTP sent to your email.</p>
+
+        <form id="verify-otp-form">
+
+            <input
+            type="text"
+            id="otp-input"
+            placeholder="Enter OTP"
+            required>
+
+            <button type="submit">
+            Verify OTP
+            </button>
+
+        </form>
+
+        <p>
+        <a href="#" id="show-login-from-otp">Back to Login</a>
+        </p>
+
+    </div>
+
+    <!-- RESET PASSWORD -->
+    <div id="reset-password-page" style="display:none;">
+
+        <h2>Reset Password</h2>
+
+        <p>Enter your new password.</p>
+
+        <form id="reset-password-form">
+
+            <input
+            type="password"
+            id="reset-new-password"
+            placeholder="New Password"
+            required>
+
+            <input
+            type="password"
+            id="reset-confirm-password"
+            placeholder="Confirm Password"
+            required>
+
+            <button type="submit">
+            Reset Password
+            </button>
+
+        </form>
+
+        <p>
+        <a href="#" id="show-login-from-reset">Back to Login</a>
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- MAIN APP -->
+<div id="main-app" style="display:none;">
+
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar">
+
+        <h2 class="logo">🎧 MusicApp</h2>
+
+        <ul>
+
+            <li>
+                <a href="#" id="nav-songs">Songs</a>
+            </li>
+
+            <li>
+                <a href="#" id="nav-playlists">Playlists</a>
+            </li>
+
+            <li>
+                <a href="#" id="nav-add-song">Add Song</a>
+            </li>
+
+            <li>
+                <a href="#" id="nav-logout">Logout</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+
+    <!-- MAIN CONTENT -->
+    <main id="content">
+
+        <!-- PROFILE ICON (TOP RIGHT) -->
+        <div id="profile-icon-container">
+            <button id="profile-btn">👤</button>
+        </div>
+
+
+        <!-- SONGS PAGE -->
+        <div id="songs-page">
+
+            <h2>🎵 Songs</h2>
+
+            <input
+            type="text"
+            id="search-input"
+            placeholder="Search songs..."
+            >
+
+            <div id="songs-container">
+                <div id="songs-list"></div>
+            </div>
+
+        </div>
+
+
+
+        <!-- ADD SONG PAGE -->
+        <div id="add-song-page" style="display:none;">
+
+            <h2>Add New Song</h2>
+
+            <form id="add-song-form">
+
+                <input
+                type="text"
+                id="song-title"
+                placeholder="Song Title"
+                required>
+
+                <input
+                type="text"
+                id="song-artist"
+                placeholder="Artist"
+                required>
+
+                <input
+                type="text"
+                id="song-album"
+                placeholder="Album"
+                required>
+
+                <input
+                type="text"
+                id="song-duration"
+                placeholder="Duration (e.g. 3:45)"
+                required>
+
+                <input
+                type="file"
+                id="song-audio-file"
+                accept="audio/*"
+                placeholder="Select Audio File"
+                required>
+
+                <button type="submit">
+                Add Song
+                </button>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- PLAYLIST PAGE -->
+        <div id="playlists-page" style="display:none;">
+
+            <h2>🎶 Playlists</h2>
+
+
+            <!-- CREATE PLAYLIST -->
+            <form id="create-playlist-form">
+
+                <input
+                type="text"
+                id="playlist-name"
+                placeholder="Playlist Name"
+                required>
+
+                <button type="submit">
+                Create Playlist
+                </button>
+
+            </form>
+
+
+
+            <!-- ADD SONG TO PLAYLIST -->
+            <div id="add-to-playlist">
+
+                <h3>Add Song to Playlist</h3>
+
+                <select id="playlist-select"></select>
+
+                <select id="song-select"></select>
+
+                <button id="add-song-to-playlist">
+                Add Song
+                </button>
+
+            </div>
+
+
+            <div id="playlists-list"></div>
+
+        </div>
+
+        <!-- PROFILE PAGE -->
+        <div id="profile-page" style="display:none;">
+
+            <h2>👤 My Profile</h2>
+
+            <div id="profile-header">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-details">
+                    <h3 id="profile-name">Loading...</h3>
+                    <p id="profile-email">Loading...</p>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h3>📊 Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <p class="stat-label">Total Songs</p>
+                        <p class="stat-value" id="total-songs">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Total Playlists</p>
+                        <p class="stat-value" id="total-playlists">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h3>🎵 Recent Songs</h3>
+                <div id="profile-songs-list"></div>
+            </div>
+
+            <div class="profile-section">
+                <h3>🎶 Your Playlists</h3>
+                <div id="profile-playlists-list"></div>
+            </div>
+
+            <button id="back-to-songs-btn" class="back-btn">← Back to Songs</button>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- MUSIC PLAYER BAR -->
+<div class="player">
+
+<strong>Now Playing:</strong>
+
+<span id="now-playing">
+No song selected
+</span>
+
+<br><br>
+
+<audio id="audio-player" controls></audio>
+
+</div>
+
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
