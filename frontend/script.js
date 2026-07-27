@@ -1223,7 +1223,10 @@ function displayPlaylistsGrid(playlists, containerId) {
     });
     grid.appendChild(card);
   });
+}
+
 function openLikedSongsDetail() {
+
   state.currentPlaylistId = "liked-songs";
   showPage("playlist-detail-page");
   setSidebarActive(null);
@@ -1293,7 +1296,9 @@ async function openPlaylistDetail(playlist, autoPlay = false) {
       if (idx >= 0) playSong(idx);
     }
     showToast("Shuffle on");
+  };
   const deleteBtn = document.getElementById("delete-playlist-btn");
+
   if (deleteBtn) {
     deleteBtn.style.display = "flex";
     deleteBtn.onclick = () => deletePlaylist(playlist._id);
