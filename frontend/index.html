@@ -362,26 +362,35 @@
           <h2>Search for songs, artists, albums</h2>
           <p>Find anything you're looking for.</p>
           <div class="browse-categories">
-            <div class="category-card" style="--cat-color:#e13300;" onclick="document.getElementById('search-input').focus()">
+            <div class="category-card" data-genre="Pop" style="--cat-color:#e13300;">
               <span>Pop</span><i class="fa-solid fa-music cat-icon"></i>
             </div>
-            <div class="category-card" style="--cat-color:#503750;" onclick="document.getElementById('search-input').focus()">
+            <div class="category-card" data-genre="Hip-Hop" style="--cat-color:#503750;">
               <span>Hip-Hop</span><i class="fa-solid fa-headphones cat-icon"></i>
             </div>
-            <div class="category-card" style="--cat-color:#1e3264;" onclick="document.getElementById('search-input').focus()">
+            <div class="category-card" data-genre="Rock" style="--cat-color:#1e3264;">
               <span>Rock</span><i class="fa-solid fa-guitar cat-icon"></i>
             </div>
-            <div class="category-card" style="--cat-color:#477d95;" onclick="document.getElementById('search-input').focus()">
+            <div class="category-card" data-genre="Electronic" style="--cat-color:#477d95;">
               <span>Electronic</span><i class="fa-solid fa-bolt cat-icon"></i>
             </div>
-            <div class="category-card" style="--cat-color:#e8115b;" onclick="document.getElementById('search-input').focus()">
+            <div class="category-card" data-genre="R&amp;B" style="--cat-color:#e8115b;">
               <span>R&amp;B</span><i class="fa-solid fa-heart cat-icon"></i>
             </div>
-            <div class="category-card" style="--cat-color:#608108;" onclick="document.getElementById('search-input').focus()">
-              <span>Jazz</span><i class="fa-solid fa-saxophone cat-icon"></i>
+            <div class="category-card" data-genre="Jazz" style="--cat-color:#608108;">
+              <span>Jazz</span><i class="fa-solid fa-compact-disc cat-icon"></i>
             </div>
           </div>
+
+          <!-- Segregated Genre Sections -->
+          <div id="genre-segregated-container" style="margin-top:36px;text-align:left;">
+            <div class="section-header" style="margin-bottom:16px;">
+              <h2 class="section-title" style="font-size:20px;font-weight:800;color:#fff;">Songs by Genre</h2>
+            </div>
+            <div id="genre-sections-list"></div>
+          </div>
         </div>
+
         <div id="search-results" style="display:none;">
           <h2 class="search-results-title">Results for "<span id="search-query-display"></span>"</h2>
           <div id="search-songs-list" class="songs-table"></div>
@@ -450,10 +459,22 @@
                   <input type="text" id="song-album" placeholder="e.g. A Night at the Opera">
                 </div>
                 <div class="form-group">
-                  <label for="song-duration">Duration</label>
-                  <input type="text" id="song-duration" placeholder="e.g. 5:55">
+                  <label for="song-genre">Genre</label>
+                  <select id="song-genre" style="width:100%;padding:10px 14px;border-radius:var(--radius-md);border:1px solid var(--border-mid);background:var(--bg-card);color:#fff;font-size:14px;">
+                    <option value="Pop">Pop</option>
+                    <option value="Hip-Hop">Hip-Hop</option>
+                    <option value="Rock">Rock</option>
+                    <option value="Electronic">Electronic</option>
+                    <option value="R&B">R&B</option>
+                    <option value="Jazz">Jazz</option>
+                  </select>
                 </div>
               </div>
+              <div class="form-group">
+                <label for="song-duration">Duration</label>
+                <input type="text" id="song-duration" placeholder="e.g. 5:55">
+              </div>
+
               <button type="submit" id="add-song-btn" class="auth-submit-btn upload-submit-btn">
                 <span class="btn-text"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Song</span>
                 <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>

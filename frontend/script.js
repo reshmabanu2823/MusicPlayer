@@ -1053,6 +1053,75 @@ function setupSearch() {
 function showSearchEmpty() {
   document.getElementById("search-empty-state").style.display = "flex";
   document.getElementById("search-results").style.display = "none";
+  renderGenreSegregatedSections();
+}
+
+function renderGenreSegregatedSections() {
+  const container = document.getElementById("genre-sections-list");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const genres = [
+    { name: "Pop", icon: "fa-music", color: "#e13300" },
+    { name: "Hip-Hop", icon: "fa-headphones", color: "#503750" },
+    { name: "Rock", icon: "fa-guitar", color: "#1e3264" },
+    { name: "Electronic", icon: "fa-bolt", color: "#477d95" },
+    { name: "R&B", icon: "fa-heart", color: "#e8115b" },
+    { name: "Jazz", icon: "fa-compact-disc", color: "#608108" },
+  ];
+
+  genres.forEach(g => {
+    const genreSongs = state.songs.filter(s => (s.genre || "Pop") === g.name);
+    if (genreSongs.length === 0) return;
+
+    const block = document.createElement("div");
+    block.className = "genre-section-block";
+    block.style.marginBottom = "28px";
+
+    block.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border-subtle);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:28px;height:28px;border-radius:6px;background:${g.color};display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;">
+            <i class="fa-solid ${g.icon}"></i>
+          </div>
+          <h3 style="font-size:16px;font-weight:700;margin:0;color:var(--text-primary);">${g.name}</h3>
+          <span style="font-size:12px;color:var(--text-secondary);font-weight:500;">(${genreSongs.length} song${genreSongs.length !== 1 ? 's' : ''})</span>
+        </div>
+        <button class="see-all-genre-btn" style="background:none;border:none;color:var(--text-secondary);font-size:12px;font-weight:600;cursor:pointer;">See all</button>
+      </div>
+      <div class="genre-cards-row cards-row"></div>
+    `;
+
+    const row = block.querySelector(".genre-cards-row");
+    genreSongs.slice(0, 8).forEach(song => {
+      const card = document.createElement("div");
+      card.className = "song-album-card";
+      const idx = state.songs.indexOf(song);
+      card.innerHTML = `
+        <div class="song-album-card-cover">
+          ${song.coverUrl
+            ? `<img src="${escHtml(song.coverUrl)}" alt="${escHtml(song.title)}" loading="lazy">`
+            : `<div class="song-album-card-cover-placeholder"><i class="fa-solid fa-music"></i></div>`}
+          <div class="card-play-overlay"><i class="fa-solid fa-play"></i></div>
+        </div>
+        <div class="song-album-card-title">${escHtml(song.title)}</div>
+        <div class="song-album-card-sub">${escHtml(song.artist)}</div>
+      `;
+      card.addEventListener("click", () => playSong(idx));
+      row.appendChild(card);
+    });
+
+    block.querySelector(".see-all-genre-btn").addEventListener("click", () => {
+      const input = document.getElementById("search-input");
+      if (input) {
+        input.value = g.name;
+        document.getElementById("clear-search-btn").style.display = "flex";
+        performSearch(g.name);
+      }
+    });
+
+    container.appendChild(block);
+  });
 }
 
 async function performSearch(query) {
@@ -1064,12 +1133,15 @@ async function performSearch(query) {
   resultsContainer.innerHTML = `<div class="skeleton-row"></div><div class="skeleton-row"></div><div class="skeleton-row"></div>`;
 
   try {
+    const qLower = query.toLowerCase();
     // Search local songs first
     const localMatches = state.songs.filter(s =>
-      s.title.toLowerCase().includes(query.toLowerCase()) ||
-      s.artist.toLowerCase().includes(query.toLowerCase()) ||
-      (s.album || "").toLowerCase().includes(query.toLowerCase())
+      s.title.toLowerCase().includes(qLower) ||
+      s.artist.toLowerCase().includes(qLower) ||
+      (s.album || "").toLowerCase().includes(qLower) ||
+      (s.genre || "").toLowerCase().includes(qLower)
     );
+
 
     // Search Jamendo library
     let jamendoResults = [];
@@ -1750,6 +1822,7 @@ function setupAddSong() {
     const title = document.getElementById("song-title").value.trim();
     const artist = document.getElementById("song-artist").value.trim();
     const album = document.getElementById("song-album").value.trim();
+    const genre = document.getElementById("song-genre")?.value || "Pop";
     const duration = document.getElementById("song-duration").value.trim();
     const file = fileInput.files[0];
     let valid = true;
@@ -1765,8 +1838,10 @@ function setupAddSong() {
       formData.append("title", title);
       formData.append("artist", artist);
       formData.append("album", album);
+      formData.append("genre", genre);
       formData.append("duration", duration);
       formData.append("file", file);
+
 
       const res = await fetch(`${API_BASE}/songs`, {
         method: "POST",

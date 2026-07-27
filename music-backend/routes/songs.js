@@ -17,7 +17,7 @@ const path = require("path");
 
 router.post("/", authenticateToken, upload.single("file"), async (req, res) => {
     try {
-        const { title, artist, album, duration } = req.body;
+        const { title, artist, album, genre, duration } = req.body;
 
         if (!title || !artist) {
             return res.status(400).json({ error: "Title and artist are required" });
@@ -32,6 +32,7 @@ router.post("/", authenticateToken, upload.single("file"), async (req, res) => {
             title,
             artist,
             album,
+            genre: genre || "Pop",
             duration,
             file,
             createdBy: req.user.id
@@ -43,6 +44,7 @@ router.post("/", authenticateToken, upload.single("file"), async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 
 /* =========================
