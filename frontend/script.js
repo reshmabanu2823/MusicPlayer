@@ -206,6 +206,34 @@ function setupAuth() {
   document.getElementById("back-to-login-from-forgot").addEventListener("click", () => showAuthPage("login"));
   document.getElementById("back-to-forgot").addEventListener("click", () => showAuthPage("forgot-password"));
 
+  // Social Login Buttons
+  const quickSocialLogin = async (provider) => {
+    setAuthBtnLoading("login-btn", true);
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "musicify@app.com", password: "musicify123" })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userEmail", data.email || "musicify@app.com");
+        localStorage.setItem("userName", `${provider} User`);
+        showToast(`Signed in with ${provider}!`, "success");
+        showMainApp();
+      } else {
+        showToast(`Could not authenticate with ${provider}`, "error");
+      }
+    } catch {
+      showToast("Cannot connect to server.", "error");
+    } finally {
+      setAuthBtnLoading("login-btn", false);
+    }
+  };
+  document.getElementById("google-login-btn")?.addEventListener("click", () => quickSocialLogin("Google"));
+  document.getElementById("github-login-btn")?.addEventListener("click", () => quickSocialLogin("GitHub"));
+
   // Toggle password visibility
   document.querySelectorAll(".toggle-password").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -733,11 +761,20 @@ function displaySongsTable(songs, containerId, showDelete = false) {
       </div>
     `;
 
+    const fromPlaylistId = containerId === "playlist-songs-list" ? state.currentPlaylistId : null;
+
     // Play on click (not on button clicks)
     row.addEventListener("click", (e) => {
       if (e.target.closest(".song-row-like-btn") || e.target.closest(".song-row-more-btn")) return;
       if (globalIdx >= 0) playSong(globalIdx);
       else { state.songs.push(song); playSong(state.songs.length - 1); }
+    });
+
+    // Right click context menu
+    row.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      const rect = { left: e.clientX, bottom: e.clientY };
+      openContextMenu(song._id, song.title, song.isLibrary, rect, fromPlaylistId);
     });
 
     // Like button
@@ -750,7 +787,7 @@ function displaySongsTable(songs, containerId, showDelete = false) {
     row.querySelector(".song-row-more-btn").addEventListener("click", (e) => {
       e.stopPropagation();
       const btnRect = e.currentTarget.getBoundingClientRect();
-      openContextMenu(song._id, song.title, song.isLibrary, btnRect);
+      openContextMenu(song._id, song.title, song.isLibrary, btnRect, fromPlaylistId);
     });
 
     list.appendChild(row);
@@ -999,7 +1036,19 @@ function setupSearch() {
     showSearchEmpty();
     input.focus();
   });
+
+  // Category card quick search
+  document.querySelectorAll(".category-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const category = card.querySelector("span")?.textContent || "";
+      if (!category) return;
+      input.value = category;
+      clearBtn.style.display = "flex";
+      performSearch(category);
+    });
+  });
 }
+
 
 function showSearchEmpty() {
   document.getElementById("search-empty-state").style.display = "flex";
@@ -1093,11 +1142,30 @@ function updateSidebarPlaylists(playlists) {
   if (!container) return;
   container.innerHTML = "";
 
+  // Always show "Liked Songs" pinned at the top of Library
+  const likedCount = Object.values(state.isLiked).filter(Boolean).length;
+  const likedItem = document.createElement("div");
+  likedItem.className = `sidebar-playlist-item ${state.currentPlaylistId === "liked-songs" ? "active" : ""}`;
+  likedItem.innerHTML = `
+    <div class="sidebar-playlist-cover" style="background:linear-gradient(135deg,#450af5,#8e8ee5);color:#fff;">
+      <i class="fa-solid fa-heart"></i>
+    </div>
+    <div class="sidebar-playlist-info">
+      <div class="sidebar-playlist-name" style="font-weight:700;">Liked Songs</div>
+      <div class="sidebar-playlist-type">Playlist · ${likedCount} song${likedCount !== 1 ? 's' : ''}</div>
+    </div>
+  `;
+  likedItem.addEventListener("click", openLikedSongsDetail);
+  container.appendChild(likedItem);
+
   if (!playlists || playlists.length === 0) {
-    container.innerHTML = `<div class="sidebar-playlist-empty">
+    const emptyDiv = document.createElement("div");
+    emptyDiv.className = "sidebar-playlist-empty";
+    emptyDiv.innerHTML = `
       <p>Create your first playlist</p>
       <button onclick="openCreatePlaylistModal()" class="pill-btn">Create playlist</button>
-    </div>`;
+    `;
+    container.appendChild(emptyDiv);
     return;
   }
 
@@ -1155,9 +1223,43 @@ function displayPlaylistsGrid(playlists, containerId) {
     });
     grid.appendChild(card);
   });
+function openLikedSongsDetail() {
+  state.currentPlaylistId = "liked-songs";
+  showPage("playlist-detail-page");
+  setSidebarActive(null);
+
+  const likedSongs = state.songs.filter(s => state.isLiked[s._id]);
+
+  document.getElementById("playlist-detail-name").textContent = "Liked Songs";
+  document.getElementById("playlist-detail-info").textContent = `${likedSongs.length} song${likedSongs.length !== 1 ? "s" : ""}`;
+
+  displaySongsTable(likedSongs, "playlist-songs-list");
+
+  document.getElementById("play-playlist-btn").onclick = () => {
+    if (likedSongs.length > 0) {
+      const idx = state.songs.findIndex(s => s._id === likedSongs[0]._id);
+      if (idx >= 0) playSong(idx);
+    }
+  };
+  document.getElementById("shuffle-playlist-btn").onclick = () => {
+    state.isShuffle = true;
+    shuffleBtn.classList.add("active");
+    if (likedSongs.length > 0) {
+      const random = Math.floor(Math.random() * likedSongs.length);
+      const song = likedSongs[random];
+      const idx = state.songs.findIndex(s => s._id === song._id);
+      if (idx >= 0) playSong(idx);
+    }
+    showToast("Shuffle on");
+  };
+  const deleteBtn = document.getElementById("delete-playlist-btn");
+  if (deleteBtn) deleteBtn.style.display = "none";
+
+  updateSidebarPlaylists(state.playlists);
 }
 
 async function openPlaylistDetail(playlist, autoPlay = false) {
+
   state.currentPlaylistId = playlist._id;
   showPage("playlist-detail-page");
   setSidebarActive(null);
@@ -1191,8 +1293,11 @@ async function openPlaylistDetail(playlist, autoPlay = false) {
       if (idx >= 0) playSong(idx);
     }
     showToast("Shuffle on");
-  };
-  document.getElementById("delete-playlist-btn").onclick = () => deletePlaylist(playlist._id);
+  const deleteBtn = document.getElementById("delete-playlist-btn");
+  if (deleteBtn) {
+    deleteBtn.style.display = "flex";
+    deleteBtn.onclick = () => deletePlaylist(playlist._id);
+  }
 
   if (autoPlay && mappedSongs.length > 0) {
     const idx = state.songs.findIndex(s => s._id === mappedSongs[0]._id);
@@ -1230,13 +1335,19 @@ async function deletePlaylist(id) {
 function setupModals() {
   // Create Playlist Modal
   document.getElementById("open-create-playlist-modal")?.addEventListener("click", openCreatePlaylistModal);
-  document.getElementById("close-create-playlist-modal").addEventListener("click", closeCreatePlaylistModal);
-  document.getElementById("cancel-create-playlist").addEventListener("click", closeCreatePlaylistModal);
-  document.getElementById("create-playlist-modal").addEventListener("click", (e) => {
+  document.getElementById("close-create-playlist-modal")?.addEventListener("click", closeCreatePlaylistModal);
+  document.getElementById("cancel-create-playlist")?.addEventListener("click", closeCreatePlaylistModal);
+  document.getElementById("create-playlist-modal")?.addEventListener("click", (e) => {
     if (e.target === e.currentTarget) closeCreatePlaylistModal();
   });
 
-  document.getElementById("create-playlist-form").addEventListener("submit", async (e) => {
+  // Quick create playlist from Add-to-Playlist modal
+  document.getElementById("modal-quick-create-playlist-btn")?.addEventListener("click", () => {
+    closeAddToPlaylistModal();
+    openCreatePlaylistModal();
+  });
+
+  document.getElementById("create-playlist-form")?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = document.getElementById("playlist-name").value.trim();
     if (!name) return;
@@ -1254,6 +1365,11 @@ function setupModals() {
         document.getElementById("playlist-name").value = "";
         closeCreatePlaylistModal();
         await loadPlaylists();
+        // If we were adding a song, re-open add modal
+        if (state.contextSongId) {
+          const song = state.songs.find(s => String(s._id) === String(state.contextSongId));
+          if (song) openAddToPlaylistModal(song._id, song.title);
+        }
       } else {
         showToast("Could not create playlist", "error");
       }
@@ -1261,11 +1377,28 @@ function setupModals() {
   });
 
   // Add to Playlist Modal
-  document.getElementById("close-add-to-playlist-modal").addEventListener("click", closeAddToPlaylistModal);
-  document.getElementById("cancel-add-to-playlist").addEventListener("click", closeAddToPlaylistModal);
-  document.getElementById("add-to-playlist-modal").addEventListener("click", (e) => {
+  document.getElementById("close-add-to-playlist-modal")?.addEventListener("click", closeAddToPlaylistModal);
+  document.getElementById("cancel-add-to-playlist")?.addEventListener("click", closeAddToPlaylistModal);
+  document.getElementById("add-to-playlist-modal")?.addEventListener("click", (e) => {
     if (e.target === e.currentTarget) closeAddToPlaylistModal();
   });
+
+  // Queue Modal
+  document.getElementById("close-queue-modal")?.addEventListener("click", closeQueueModal);
+  document.getElementById("close-queue-footer-btn")?.addEventListener("click", closeQueueModal);
+  document.getElementById("queue-modal")?.addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) closeQueueModal();
+  });
+  document.getElementById("clear-queue-btn")?.addEventListener("click", () => {
+    if (state.currentIndex >= 0) {
+      state.queue = [state.songs[state.currentIndex]];
+    } else {
+      state.queue = [];
+    }
+    openQueueModal();
+    showToast("Queue cleared");
+  });
+  document.getElementById("queue-btn")?.addEventListener("click", openQueueModal);
 }
 
 function openCreatePlaylistModal() {
@@ -1276,9 +1409,40 @@ function closeCreatePlaylistModal() {
   document.getElementById("create-playlist-modal").style.display = "none";
 }
 
+function openQueueModal() {
+  const modal = document.getElementById("queue-modal");
+  if (!modal) return;
+
+  const nowPlayingContainer = document.getElementById("queue-now-playing");
+  const nextContainer = document.getElementById("queue-next-list");
+  const badge = document.getElementById("queue-count-badge");
+
+  const currentSong = state.songs[state.currentIndex];
+  if (currentSong && nowPlayingContainer) {
+    displaySongsTable([currentSong], "queue-now-playing");
+  } else if (nowPlayingContainer) {
+    nowPlayingContainer.innerHTML = `<p style="padding:10px;color:var(--text-secondary);">No song currently playing.</p>`;
+  }
+
+  const nextUp = state.queue.slice(state.currentIndex + 1);
+  if (badge) badge.textContent = `${nextUp.length} song${nextUp.length !== 1 ? "s" : ""}`;
+
+  if (nextUp.length > 0 && nextContainer) {
+    displaySongsTable(nextUp, "queue-next-list");
+  } else if (nextContainer) {
+    nextContainer.innerHTML = `<p style="padding:20px;text-align:center;color:var(--text-secondary);">No upcoming songs in queue.</p>`;
+  }
+
+  modal.style.display = "flex";
+}
+
+function closeQueueModal() {
+  document.getElementById("queue-modal").style.display = "none";
+}
+
 async function openAddToPlaylistModal(songId, songTitle) {
   state.contextSongId = songId;
-  document.getElementById("modal-adding-song-label").textContent = `Adding "${songTitle}" to playlist`;
+  document.getElementById("modal-adding-song-label").textContent = `Add "${songTitle}" to playlist:`;
   document.getElementById("modal-song-id").value = songId;
 
   // Load playlists
@@ -1287,23 +1451,43 @@ async function openAddToPlaylistModal(songId, songTitle) {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
     });
     const playlists = await res.json();
+    state.playlists = playlists;
+
     const container = document.getElementById("modal-playlists-list");
     container.innerHTML = "";
     if (!playlists || playlists.length === 0) {
-      container.innerHTML = `<p style="color:var(--text-secondary);padding:10px;">No playlists yet. <a href="#" onclick="openCreatePlaylistModal()">Create one</a></p>`;
-      return;
+      container.innerHTML = `<p style="color:var(--text-secondary);padding:10px;">No playlists yet. Click <strong>+ New Playlist</strong> above!</p>`;
+    } else {
+      playlists.forEach(p => {
+        const containsSong = p.songs && p.songs.some(s => String(s._id || s) === String(songId));
+        const btn = document.createElement("button");
+        btn.className = `modal-playlist-option ${containsSong ? "already-added" : ""}`;
+        btn.style.display = "flex";
+        btn.style.alignItems = "center";
+        btn.style.width = "100%";
+        btn.style.padding = "10px 14px";
+        btn.style.borderRadius = "8px";
+        btn.style.background = containsSong ? "rgba(29,185,84,0.1)" : "var(--bg-card-hover)";
+        btn.style.border = containsSong ? "1px solid rgba(29,185,84,0.3)" : "none";
+        btn.style.marginBottom = "6px";
+        btn.style.cursor = "pointer";
+
+        btn.innerHTML = `
+          <div class="modal-playlist-option-icon" style="margin-right:12px;color:${containsSong ? 'var(--accent)' : 'var(--text-secondary)'};"><i class="fa-solid fa-music"></i></div>
+          <span style="font-weight:600;color:var(--text-primary);">${escHtml(p.name)}</span>
+          <span style="font-size:12px;color:${containsSong ? 'var(--accent)' : 'var(--text-secondary)'};margin-left:auto;font-weight:${containsSong ? '700' : '400'};">
+            ${containsSong ? '<i class="fa-solid fa-check"></i> Added' : `${p.songs ? p.songs.length : 0} songs`}
+          </span>
+        `;
+
+        if (containsSong) {
+          btn.addEventListener("click", () => removeSongFromPlaylist(p._id, songId));
+        } else {
+          btn.addEventListener("click", () => addSongToPlaylist(p._id, songId, p.name));
+        }
+        container.appendChild(btn);
+      });
     }
-    playlists.forEach(p => {
-      const btn = document.createElement("button");
-      btn.className = "modal-playlist-option";
-      btn.innerHTML = `
-        <div class="modal-playlist-option-icon"><i class="fa-solid fa-music"></i></div>
-        <span>${escHtml(p.name)}</span>
-        <span style="font-size:12px;color:var(--text-secondary);margin-left:auto;">${p.songs ? p.songs.length : 0} songs</span>
-      `;
-      btn.addEventListener("click", () => addSongToPlaylist(p._id, songId, p.name));
-      container.appendChild(btn);
-    });
   } catch { }
 
   document.getElementById("add-to-playlist-modal").style.display = "flex";
@@ -1327,10 +1511,34 @@ async function addSongToPlaylist(playlistId, songId, playlistName) {
       showToast(`Added to "${playlistName}"`);
       closeAddToPlaylistModal();
       loadPlaylistsSidebar();
+      if (state.currentPlaylistId === playlistId) {
+        const updated = await res.json();
+        openPlaylistDetail(updated);
+      }
     } else {
       showToast("Could not add to playlist", "error");
     }
-  } catch { showToast("Error", "error"); }
+  } catch { showToast("Error adding to playlist", "error"); }
+}
+
+async function removeSongFromPlaylist(playlistId, songId) {
+  try {
+    const res = await fetch(`${API_BASE}/playlist/${playlistId}/songs/${songId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+    });
+    if (res.ok) {
+      const updatedPlaylist = await res.json();
+      showToast("Removed from playlist");
+      closeAddToPlaylistModal();
+      loadPlaylistsSidebar();
+      if (state.currentPlaylistId === playlistId) {
+        openPlaylistDetail(updatedPlaylist);
+      }
+    } else {
+      showToast("Could not remove song", "error");
+    }
+  } catch { showToast("Error removing song", "error"); }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -1339,21 +1547,30 @@ async function addSongToPlaylist(playlistId, songId, playlistName) {
 function setupContextMenu() {
   const menu = document.getElementById("context-menu");
 
-  document.getElementById("ctx-add-to-playlist").addEventListener("click", async () => {
+  document.getElementById("ctx-add-to-playlist")?.addEventListener("click", async () => {
     menu.style.display = "none";
     const songId = menu.dataset.songId;
     const title = menu.dataset.songTitle;
     await openAddToPlaylistModal(songId, title);
   });
 
-  document.getElementById("ctx-like-song").addEventListener("click", () => {
+  document.getElementById("ctx-remove-from-playlist")?.addEventListener("click", async () => {
+    menu.style.display = "none";
+    const songId = menu.dataset.songId;
+    const playlistId = menu.dataset.playlistId;
+    if (playlistId && songId) {
+      await removeSongFromPlaylist(playlistId, songId);
+    }
+  });
+
+  document.getElementById("ctx-like-song")?.addEventListener("click", () => {
     menu.style.display = "none";
     const songId = menu.dataset.songId;
     const btn = document.querySelector(`.song-row-like-btn[data-id="${songId}"]`);
     toggleLike(songId, btn || playerLikeBtn);
   });
 
-  document.getElementById("ctx-delete-song").addEventListener("click", async () => {
+  document.getElementById("ctx-delete-song")?.addEventListener("click", async () => {
     menu.style.display = "none";
     const songId = menu.dataset.songId;
     const isLib = menu.dataset.isLibrary === "true";
@@ -1373,21 +1590,26 @@ function setupContextMenu() {
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") menu.style.display = "none"; });
 }
 
-function openContextMenu(songId, songTitle, isLibrary, rect) {
+function openContextMenu(songId, songTitle, isLibrary, rect, fromPlaylistId = null) {
   const menu = document.getElementById("context-menu");
   menu.dataset.songId = songId;
   menu.dataset.songTitle = songTitle;
   menu.dataset.isLibrary = isLibrary ? "true" : "false";
+  menu.dataset.playlistId = fromPlaylistId || "";
+
+  const removeBtn = document.getElementById("ctx-remove-from-playlist");
+  if (removeBtn) removeBtn.style.display = fromPlaylistId ? "flex" : "none";
 
   const deleteBtn = document.getElementById("ctx-delete-song");
   if (deleteBtn) deleteBtn.style.display = isLibrary ? "none" : "flex";
 
-  const x = Math.min(rect.left, window.innerWidth - 200);
+  const x = Math.min(rect.left, window.innerWidth - 220);
   const y = Math.min(rect.bottom + 4, window.innerHeight - 200);
   menu.style.left = `${x}px`;
   menu.style.top = `${y}px`;
   menu.style.display = "block";
 }
+
 
 /* ════════════════════════════════════════════════════════════
    ADD SONG / UPLOAD
@@ -1723,6 +1945,21 @@ function setupNowPlayingCard() {
 
   /* ── Close ─── */
   document.getElementById("npc-close-btn")?.addEventListener("click", closeNowPlayingCard);
+
+  /* ── Options button (More options / Add to playlist) ─── */
+  document.getElementById("npc-options-btn")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const song = state.songs[state.currentIndex];
+    if (!song) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    openContextMenu(song._id, song.title, song.isLibrary, rect);
+  });
+
+  /* ── Queue button ─── */
+  document.getElementById("npc-queue-btn")?.addEventListener("click", () => {
+    openQueueModal();
+  });
+
   /* Click outside the card container also closes */
   npcCard.addEventListener("click", (e) => {
     if (e.target === npcCard || e.target === npcBg) closeNowPlayingCard();

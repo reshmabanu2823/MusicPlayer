@@ -37,17 +37,65 @@ router.get("/", authenticateToken, async (req, res) => {
 
 
 /* =========================
+   GET SINGLE PLAYLIST
+   GET /playlist/:id
+========================= */
+
+router.get("/:id", authenticateToken, async (req, res) => {
+    try {
+        const playlist = await Playlist.findById(req.params.id).populate("songs");
+        if (!playlist) {
+            return res.status(404).json({ error: "Playlist not found" });
+        }
+        res.json(playlist);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+/* =========================
    ADD SONG TO PLAYLIST
    PUT /playlist/:id
 ========================= */
 
 router.put("/:id", authenticateToken, async (req, res) => {
     try {
+        const { songId } = req.body;
+        if (!songId) {
+            return res.status(400).json({ error: "songId is required" });
+        }
+
         const playlist = await Playlist.findByIdAndUpdate(
             req.params.id,
-            { $push: { songs: req.body.songId } },
+            { $addToSet: { songs: songId } },
             { new: true }
-        );
+        ).populate("songs");
+
+        res.json(playlist);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+/* =========================
+   REMOVE SONG FROM PLAYLIST
+   DELETE /playlist/:id/songs/:songId
+========================= */
+
+router.delete("/:id/songs/:songId", authenticateToken, async (req, res) => {
+    try {
+        const { id, songId } = req.params;
+        const playlist = await Playlist.findByIdAndUpdate(
+            id,
+            { $pull: { songs: songId } },
+            { new: true }
+        ).populate("songs");
+
+        if (!playlist) {
+            return res.status(404).json({ error: "Playlist not found" });
+        }
 
         res.json(playlist);
     } catch (error) {
@@ -71,4 +119,4 @@ router.delete("/:id", authenticateToken, async (req, res) => {
 });
 
 
-module.exports = router;
+module.exports = router;
