@@ -1262,17 +1262,28 @@ function openLikedSongsDetail() {
 }
 
 async function openPlaylistDetail(playlist, autoPlay = false) {
-
   state.currentPlaylistId = playlist._id;
   showPage("playlist-detail-page");
   setSidebarActive(null);
 
-  document.getElementById("playlist-detail-name").textContent = playlist.name;
-  const count = playlist.songs ? playlist.songs.length : 0;
-  document.getElementById("playlist-detail-info").textContent = `${count} song${count !== 1 ? "s" : ""}`;
+  // Fetch fresh populated playlist if it's a real MongoDB playlist
+  let activePlaylist = playlist;
+  if (playlist._id && playlist._id !== "liked-songs") {
+    try {
+      const res = await fetch(`${API_BASE}/playlist/${playlist._id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+      });
+      if (res.ok) {
+        activePlaylist = await res.json();
+      }
+    } catch { }
+  }
 
-  const songs = playlist.songs ? playlist.songs.filter(Boolean) : [];
-  const mappedSongs = songs.map(s => ({
+  document.getElementById("playlist-detail-name").textContent = activePlaylist.name;
+  const rawSongs = activePlaylist.songs ? activePlaylist.songs.filter(Boolean) : [];
+  document.getElementById("playlist-detail-info").textContent = `${rawSongs.length} song${rawSongs.length !== 1 ? "s" : ""}`;
+
+  const mappedSongs = rawSongs.map(s => ({
     ...s,
     audioUrl: s.file ? (s.file.startsWith("http") ? s.file : `${API_BASE}${s.file}`) : null,
     coverUrl: null,
@@ -1297,11 +1308,32 @@ async function openPlaylistDetail(playlist, autoPlay = false) {
     }
     showToast("Shuffle on");
   };
-  const deleteBtn = document.getElementById("delete-playlist-btn");
 
-  if (deleteBtn) {
-    deleteBtn.style.display = "flex";
-    deleteBtn.onclick = () => deletePlaylist(playlist._id);
+  const deleteBtn = document.getElementById("delete-playlist-btn");
+  const addBtn = document.getElementById("add-songs-to-playlist-btn");
+  const suggestionsBox = document.getElementById("playlist-add-suggestions");
+
+  if (activePlaylist._id === "liked-songs") {
+    if (deleteBtn) deleteBtn.style.display = "none";
+    if (addBtn) addBtn.style.display = "none";
+    if (suggestionsBox) suggestionsBox.style.display = "none";
+  } else {
+    if (deleteBtn) {
+      deleteBtn.style.display = "flex";
+      deleteBtn.onclick = () => deletePlaylist(activePlaylist._id);
+    }
+    if (addBtn) {
+      addBtn.style.display = "inline-flex";
+      addBtn.onclick = () => {
+        if (suggestionsBox) {
+          suggestionsBox.style.display = "block";
+          document.getElementById("playlist-suggest-search")?.focus();
+          suggestionsBox.scrollIntoView({ behavior: "smooth" });
+        }
+      };
+    }
+    // Render in-page song suggestions to add to this playlist
+    buildPlaylistSuggestions(activePlaylist, mappedSongs);
   }
 
   if (autoPlay && mappedSongs.length > 0) {
@@ -1311,6 +1343,80 @@ async function openPlaylistDetail(playlist, autoPlay = false) {
 
   updateSidebarPlaylists(state.playlists);
 }
+
+/**
+ * Render a list of available library songs at the bottom of the playlist page
+ * so users can add songs to the playlist with a single click.
+ */
+function buildPlaylistSuggestions(playlist, currentSongs) {
+  const box = document.getElementById("playlist-add-suggestions");
+  const listContainer = document.getElementById("playlist-suggest-list");
+  const searchInput = document.getElementById("playlist-suggest-search");
+  if (!box || !listContainer) return;
+
+  // Always show suggestions if playlist is empty or user clicks "+ Add Songs"
+  box.style.display = currentSongs.length === 0 ? "block" : (box.style.display === "none" ? "block" : box.style.display);
+
+  const existingIds = new Set(currentSongs.map(s => String(s._id)));
+
+  const renderSuggestions = (filterQuery = "") => {
+    listContainer.innerHTML = "";
+    const available = state.songs.filter(s => {
+      if (existingIds.has(String(s._id))) return false;
+      if (!filterQuery) return true;
+      const q = filterQuery.toLowerCase();
+      return (
+        s.title.toLowerCase().includes(q) ||
+        s.artist.toLowerCase().includes(q) ||
+        (s.album || "").toLowerCase().includes(q)
+      );
+    });
+
+    if (available.length === 0) {
+      listContainer.innerHTML = `<p style="padding:20px;text-align:center;color:var(--text-secondary);">No more songs available to add.</p>`;
+      return;
+    }
+
+    available.slice(0, 10).forEach(song => {
+      const row = document.createElement("div");
+      row.className = "song-row";
+      row.style.gridTemplateColumns = "40px 1fr 120px 100px";
+      row.innerHTML = `
+        <div class="song-row-index"><i class="fa-solid fa-music"></i></div>
+        <div class="song-row-info">
+          <div class="song-row-text">
+            <div class="song-row-title">${escHtml(song.title)}</div>
+            <div class="song-row-artist">${escHtml(song.artist)}</div>
+          </div>
+        </div>
+        <div class="song-row-album">${escHtml(song.album || "")}</div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;">
+          <button class="pill-btn add-suggest-btn" style="padding:4px 12px;font-size:12px;border-color:var(--accent);color:var(--accent);">
+            <i class="fa-solid fa-plus"></i> Add
+          </button>
+        </div>
+      `;
+
+      row.querySelector(".add-suggest-btn").addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const btn = e.currentTarget;
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Adding...`;
+        await addSongToPlaylist(playlist._id, song._id, playlist.name);
+        openPlaylistDetail(playlist);
+      });
+
+      listContainer.appendChild(row);
+    });
+  };
+
+  renderSuggestions();
+
+  if (searchInput) {
+    searchInput.oninput = (e) => renderSuggestions(e.target.value.trim());
+  }
+}
+
 
 async function deletePlaylist(id) {
   if (!confirm("Delete this playlist?")) return;
