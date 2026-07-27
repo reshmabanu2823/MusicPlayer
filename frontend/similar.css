@@ -1,0 +1,177 @@
+/* ══════════════════════════════════════════════════════════════
+   NPC — SONGS LIKE THIS SECTION
+   ══════════════════════════════════════════════════════════════ */
+
+.npc-similar-section {
+  margin-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 20px;
+}
+
+.npc-similar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.npc-similar-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.npc-similar-title i { color: var(--accent); font-size: 11px; }
+
+.npc-similar-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(29,185,84,0.12);
+  border: 1px solid rgba(29,185,84,0.25);
+  border-radius: 20px;
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+}
+
+/* Scrollable list */
+.npc-similar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+.npc-similar-list::-webkit-scrollbar { width: 3px; }
+.npc-similar-list::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 4px;
+}
+
+/* Individual song card */
+.npc-similar-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.15s;
+  position: relative;
+}
+.npc-similar-card:hover {
+  background: rgba(255,255,255,0.07);
+  transform: translateX(3px);
+}
+.npc-similar-card:active { transform: scale(0.98); }
+
+/* Cover art */
+.npc-similar-cover {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, #1db954, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+.npc-similar-cover img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Song meta */
+.npc-similar-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.npc-similar-song-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.npc-similar-song-artist {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Match score */
+.npc-similar-score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.npc-similar-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.npc-similar-bar-track {
+  width: 36px;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.npc-similar-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* Skeleton loading */
+.npc-similar-placeholder { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
+.npc-similar-skeleton {
+  height: 52px;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 0%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: npcSkeletonShimmer 1.6s ease-in-out infinite;
+}
+@keyframes npcSkeletonShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Not-ready state */
+.npc-similar-not-ready {
+  text-align: center;
+  padding: 16px 0 8px;
+  color: rgba(255,255,255,0.3);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.npc-similar-not-ready i {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: rgba(255,255,255,0.15);
+}

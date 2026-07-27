@@ -1,0 +1,5 @@
+node_modules/
+*.log
+.DS_Store
+music-backend/node_modules/
+music-backend/.env

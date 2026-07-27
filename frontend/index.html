@@ -1,408 +1,784 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Music Streaming App</title>
-
-<link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musicify — Music Streaming</title>
+  <meta name="description" content="Musicify — Your personal music streaming platform. Listen to millions of songs for free.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231db954'/><text y='.9em' font-size='75' x='12'>🎵</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="similar.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-
-
 <body>
 
-<!-- AUTH SECTION -->
+<!-- TOAST NOTIFICATION -->
+<div id="toast-container"></div>
+
+<!-- ==================== AUTH SECTION ==================== -->
 <div id="auth-container">
 
-    <!-- LOGIN -->
-    <div id="login-page">
+  <div class="auth-bg">
+    <div class="auth-orb orb-1"></div>
+    <div class="auth-orb orb-2"></div>
+    <div class="auth-orb orb-3"></div>
+  </div>
 
-        <h2>Login</h2>
+  <div class="auth-card-wrapper">
 
-        <form id="login-form">
-
-            <input
-            type="email"
-            id="login-email"
-            placeholder="Email"
-            required>
-
-            <input
-            type="password"
-            id="login-password"
-            placeholder="Password"
-            required>
-
-            <button type="submit">
-            Login
-            </button>
-
-        </form>
-
-        <p>
-        Don't have an account?
-        <a href="#" id="show-register">Register</a>
-        </p>
-
-        <p>
-        <a href="#" id="show-forgot-password">Forgot Password?</a>
-        </p>
-
+    <div class="auth-brand">
+      <i class="fa-solid fa-music auth-brand-icon"></i>
+      <span class="auth-brand-name">Musicify</span>
     </div>
 
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="auth-card">
+      <h1 class="auth-title">Log in to Musicify</h1>
 
-    <!-- REGISTER -->
-    <div id="register-page" style="display:none;">
+      <div class="social-auth">
+        <button class="social-btn" id="google-login-btn" type="button">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continue with Google
+        </button>
+        <button class="social-btn" id="github-login-btn" type="button">
+          <i class="fa-brands fa-github"></i>
+          Continue with GitHub
+        </button>
+      </div>
 
-        <h2>Create Account</h2>
+      <div class="auth-divider"><span>or</span></div>
 
-        <form id="register-form">
-
-            <input
-            type="text"
-            id="register-name"
-            placeholder="Name"
-            required>
-
-            <input
-            type="email"
-            id="register-email"
-            placeholder="Email"
-            required>
-
-            <input
-            type="password"
-            id="register-password"
-            placeholder="Password"
-            required>
-
-            <button type="submit">
-            Register
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="login-email">Email address</label>
+          <input type="email" id="login-email" placeholder="name@example.com" autocomplete="email" required>
+          <div class="field-error" id="login-email-error"></div>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" required>
+            <button type="button" class="toggle-password" data-target="login-password" aria-label="Show password">
+              <i class="fa-regular fa-eye"></i>
             </button>
+          </div>
+          <div class="field-error" id="login-password-error"></div>
+        </div>
+        <button type="submit" id="login-btn" class="auth-submit-btn">
+          <span class="btn-text">Log In</span>
+          <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+        </button>
+      </form>
 
-        </form>
-
-        <p>
-        Already have an account?
-        <a href="#" id="show-login">Login</a>
-        </p>
-
+      <div class="auth-footer-links">
+        <a href="#" id="show-forgot-password">Forgot your password?</a>
+      </div>
+      <div class="auth-switch">
+        <span>Don't have an account?</span>
+        <a href="#" id="show-register">Sign up for Musicify</a>
+      </div>
     </div>
 
-    <!-- FORGOT PASSWORD -->
-    <div id="forgot-password-page" style="display:none;">
+    <!-- REGISTER PAGE -->
+    <div id="register-page" class="auth-card" style="display:none;">
+      <h1 class="auth-title">Sign up for free</h1>
 
-        <h2>Forgot Password</h2>
-
-        <p>Enter your email to receive an OTP.</p>
-
-        <form id="forgot-password-form">
-
-            <input
-            type="email"
-            id="forgot-email"
-            placeholder="Email"
-            required>
-
-            <button type="submit">
-            Send OTP
+      <form id="register-form" novalidate>
+        <div class="form-group">
+          <label for="register-name">What's your name?</label>
+          <input type="text" id="register-name" placeholder="Enter your name" autocomplete="name" required>
+          <div class="field-error" id="register-name-error"></div>
+        </div>
+        <div class="form-group">
+          <label for="register-email">What's your email?</label>
+          <input type="email" id="register-email" placeholder="Enter your email" autocomplete="email" required>
+          <div class="field-error" id="register-email-error"></div>
+        </div>
+        <div class="form-group">
+          <label for="register-password">Create a password</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="register-password" placeholder="Create a password" autocomplete="new-password" required>
+            <button type="button" class="toggle-password" data-target="register-password" aria-label="Show password">
+              <i class="fa-regular fa-eye"></i>
             </button>
+          </div>
+          <div class="password-strength" id="password-strength-bar">
+            <div class="strength-track"><div class="strength-fill" id="strength-fill"></div></div>
+            <span class="strength-label" id="strength-label"></span>
+          </div>
+          <div class="field-error" id="register-password-error"></div>
+        </div>
+        <button type="submit" id="register-btn" class="auth-submit-btn">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+        </button>
+      </form>
 
-        </form>
-
-        <p>
-        Remember your password?
-        <a href="#" id="show-login-from-forgot">Login</a>
-        </p>
-
+      <div class="auth-switch">
+        <span>Already have an account?</span>
+        <a href="#" id="show-login">Log in here</a>
+      </div>
     </div>
 
-    <!-- VERIFY OTP -->
-    <div id="verify-otp-page" style="display:none;">
-
-        <h2>Verify OTP</h2>
-
-        <p>Enter the OTP sent to your email.</p>
-
-        <form id="verify-otp-form">
-
-            <input
-            type="text"
-            id="otp-input"
-            placeholder="Enter OTP"
-            required>
-
-            <button type="submit">
-            Verify OTP
-            </button>
-
-        </form>
-
-        <p>
-        <a href="#" id="show-login-from-otp">Back to Login</a>
-        </p>
-
+    <!-- FORGOT PASSWORD PAGE -->
+    <div id="forgot-password-page" class="auth-card" style="display:none;">
+      <button class="back-auth-btn" id="back-to-login-from-forgot">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <h1 class="auth-title">Reset your password</h1>
+      <p class="auth-subtitle">Enter the email address associated with your account and we'll send you an OTP.</p>
+      <form id="forgot-password-form" novalidate>
+        <div class="form-group">
+          <label for="forgot-email">Email address</label>
+          <input type="email" id="forgot-email" placeholder="name@example.com" autocomplete="email" required>
+          <div class="field-error" id="forgot-email-error"></div>
+        </div>
+        <button type="submit" id="forgot-btn" class="auth-submit-btn">
+          <span class="btn-text">Send OTP</span>
+          <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+        </button>
+      </form>
     </div>
 
-    <!-- RESET PASSWORD -->
-    <div id="reset-password-page" style="display:none;">
-
-        <h2>Reset Password</h2>
-
-        <p>Enter your new password.</p>
-
-        <form id="reset-password-form">
-
-            <input
-            type="password"
-            id="reset-new-password"
-            placeholder="New Password"
-            required>
-
-            <input
-            type="password"
-            id="reset-confirm-password"
-            placeholder="Confirm Password"
-            required>
-
-            <button type="submit">
-            Reset Password
-            </button>
-
-        </form>
-
-        <p>
-        <a href="#" id="show-login-from-reset">Back to Login</a>
-        </p>
-
+    <!-- VERIFY OTP PAGE -->
+    <div id="verify-otp-page" class="auth-card" style="display:none;">
+      <button class="back-auth-btn" id="back-to-forgot">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <h1 class="auth-title">Enter the OTP</h1>
+      <p class="auth-subtitle" id="otp-sent-to">We've sent a 6-digit code to your email.</p>
+      <form id="verify-otp-form" novalidate>
+        <div class="form-group">
+          <div class="otp-inputs">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
+          </div>
+          <input type="hidden" id="otp-input">
+          <div class="field-error" id="otp-error"></div>
+        </div>
+        <button type="submit" id="verify-otp-btn" class="auth-submit-btn">
+          <span class="btn-text">Verify OTP</span>
+          <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+        </button>
+      </form>
+      <p class="resend-otp">Didn't receive it? <a href="#" id="resend-otp-btn">Resend OTP</a></p>
     </div>
 
+    <!-- RESET PASSWORD PAGE -->
+    <div id="reset-password-page" class="auth-card" style="display:none;">
+      <h1 class="auth-title">Create new password</h1>
+      <p class="auth-subtitle">Your new password must be different from your previous password.</p>
+      <form id="reset-password-form" novalidate>
+        <div class="form-group">
+          <label for="reset-new-password">New Password</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="reset-new-password" placeholder="New password" required>
+            <button type="button" class="toggle-password" data-target="reset-new-password" aria-label="Show password">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="field-error" id="reset-password-error"></div>
+        </div>
+        <div class="form-group">
+          <label for="reset-confirm-password">Confirm New Password</label>
+          <div class="input-password-wrapper">
+            <input type="password" id="reset-confirm-password" placeholder="Confirm new password" required>
+            <button type="button" class="toggle-password" data-target="reset-confirm-password" aria-label="Show password">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="field-error" id="reset-confirm-error"></div>
+        </div>
+        <button type="submit" id="reset-btn" class="auth-submit-btn">
+          <span class="btn-text">Reset Password</span>
+          <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+        </button>
+      </form>
+    </div>
+
+  </div>
 </div>
 
 
-
-<!-- MAIN APP -->
+<!-- ==================== MAIN APP ==================== -->
 <div id="main-app" style="display:none;">
 
+  <!-- LEFT SIDEBAR -->
+  <nav id="sidebar">
 
-    <!-- SIDEBAR -->
-    <nav id="sidebar">
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <a href="#" id="nav-home" class="logo-link">
+        <i class="fa-solid fa-music logo-icon"></i>
+        <span class="logo-text">Musicify</span>
+      </a>
+    </div>
 
-        <h2 class="logo">🎧 MusicApp</h2>
+    <!-- Main Nav -->
+    <ul class="sidebar-nav" role="navigation" aria-label="Main navigation">
+      <li>
+        <a href="#" id="nav-songs" class="sidebar-link active" aria-label="Home">
+          <i class="fa-solid fa-house sidebar-icon"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="nav-search" class="sidebar-link" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass sidebar-icon"></i>
+          <span>Search</span>
+        </a>
+      </li>
+    </ul>
 
-        <ul>
+    <!-- Library Section -->
+    <div class="sidebar-library">
+      <div class="library-header">
+        <button class="library-title-btn" id="nav-playlists" aria-label="Your Library">
+          <i class="fa-solid fa-book sidebar-icon"></i>
+          <span>Your Library</span>
+        </button>
+        <button class="library-add-btn" id="create-playlist-quick-btn" aria-label="Create playlist" title="Create playlist">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
 
-            <li>
-                <a href="#" id="nav-songs">Songs</a>
-            </li>
-
-            <li>
-                <a href="#" id="nav-playlists">Playlists</a>
-            </li>
-
-            <li>
-                <a href="#" id="nav-add-song">Add Song</a>
-            </li>
-
-            <li>
-                <a href="#" id="nav-logout">Logout</a>
-            </li>
-
-        </ul>
-
-    </nav>
-
-
-
-    <!-- MAIN CONTENT -->
-    <main id="content">
-
-        <!-- PROFILE ICON (TOP RIGHT) -->
-        <div id="profile-icon-container">
-            <button id="profile-btn">👤</button>
+      <div id="sidebar-playlists" class="sidebar-playlists-list">
+        <div class="sidebar-playlist-empty">
+          <p>Create your first playlist</p>
+          <button id="create-first-playlist-btn" class="pill-btn">Create playlist</button>
         </div>
+      </div>
+    </div>
 
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <a href="#" id="nav-add-song" class="sidebar-footer-link" title="Upload a song">
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+        <span>Upload Music</span>
+      </a>
+      <button id="nav-logout" class="sidebar-footer-link logout-btn" title="Log out">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Log Out</span>
+      </button>
+    </div>
 
-        <!-- SONGS PAGE -->
-        <div id="songs-page">
+  </nav>
 
-            <h2>🎵 Songs</h2>
+  <!-- MAIN CONTENT AREA -->
+  <main id="content">
 
-            <input
-            type="text"
-            id="search-input"
-            placeholder="Search songs..."
-            >
+    <!-- TOP BAR -->
+    <div id="topbar">
+      <div class="topbar-nav">
+        <button id="topbar-back" class="topbar-nav-btn" aria-label="Go back">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button id="topbar-forward" class="topbar-nav-btn" aria-label="Go forward">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="topbar-search-wrap" id="topbar-search-wrap" style="display:none;">
+        <div class="topbar-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="What do you want to listen to?" autocomplete="off">
+          <button id="clear-search-btn" class="clear-search" style="display:none;" aria-label="Clear search">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="topbar-user">
+        <button id="profile-btn" class="profile-avatar-btn" aria-label="Profile">
+          <div class="profile-avatar-circle" id="profile-avatar-circle">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <span id="topbar-username">User</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <div id="profile-dropdown" class="profile-dropdown" style="display:none;">
+          <a href="#" id="dropdown-profile">
+            <i class="fa-solid fa-user"></i> Profile
+          </a>
+          <a href="#" id="dropdown-upload">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Song
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" id="dropdown-logout" class="logout-option">
+            <i class="fa-solid fa-right-from-bracket"></i> Log Out
+          </a>
+        </div>
+      </div>
+    </div>
 
-            <div id="songs-container">
-                <div id="songs-list"></div>
+    <!-- HOME / SONGS PAGE -->
+    <div id="songs-page" class="page-section">
+      <div class="page-gradient-header" id="songs-header-gradient">
+        <h1 class="page-greeting" id="page-greeting">Good evening</h1>
+        <div class="featured-grid" id="featured-grid">
+          <!-- Featured quick-access tiles will be inserted by JS -->
+        </div>
+      </div>
+
+      <div class="page-content-area">
+        <section class="section-block">
+          <div class="section-header">
+            <h2 class="section-title">Recently Played</h2>
+            <a href="#" class="see-all-link">See all</a>
+          </div>
+          <div id="recent-songs-row" class="cards-row">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-header">
+            <h2 class="section-title">All Songs</h2>
+          </div>
+          <div id="songs-list" class="songs-table">
+            <!-- Populated by JS -->
+          </div>
+          <div id="songs-loading" class="loading-skeleton" style="display:none;">
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+            <div class="skeleton-row"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- SEARCH PAGE -->
+    <div id="search-page" class="page-section" style="display:none;">
+      <div class="page-content-area">
+        <div id="search-empty-state" class="search-empty">
+          <i class="fa-solid fa-magnifying-glass search-empty-icon"></i>
+          <h2>Search for songs, artists, albums</h2>
+          <p>Find anything you're looking for.</p>
+          <div class="browse-categories">
+            <div class="category-card" style="--cat-color:#e13300;" onclick="document.getElementById('search-input').focus()">
+              <span>Pop</span><i class="fa-solid fa-music cat-icon"></i>
+            </div>
+            <div class="category-card" style="--cat-color:#503750;" onclick="document.getElementById('search-input').focus()">
+              <span>Hip-Hop</span><i class="fa-solid fa-headphones cat-icon"></i>
+            </div>
+            <div class="category-card" style="--cat-color:#1e3264;" onclick="document.getElementById('search-input').focus()">
+              <span>Rock</span><i class="fa-solid fa-guitar cat-icon"></i>
+            </div>
+            <div class="category-card" style="--cat-color:#477d95;" onclick="document.getElementById('search-input').focus()">
+              <span>Electronic</span><i class="fa-solid fa-bolt cat-icon"></i>
+            </div>
+            <div class="category-card" style="--cat-color:#e8115b;" onclick="document.getElementById('search-input').focus()">
+              <span>R&amp;B</span><i class="fa-solid fa-heart cat-icon"></i>
+            </div>
+            <div class="category-card" style="--cat-color:#608108;" onclick="document.getElementById('search-input').focus()">
+              <span>Jazz</span><i class="fa-solid fa-saxophone cat-icon"></i>
+            </div>
+          </div>
+        </div>
+        <div id="search-results" style="display:none;">
+          <h2 class="search-results-title">Results for "<span id="search-query-display"></span>"</h2>
+          <div id="search-songs-list" class="songs-table"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYLISTS PAGE -->
+    <div id="playlists-page" class="page-section" style="display:none;">
+      <div class="page-gradient-header playlist-header-bg">
+        <div class="playlist-header-content">
+          <div class="playlist-header-icon">
+            <i class="fa-solid fa-music"></i>
+          </div>
+          <div>
+            <p class="playlist-type-label">Your Library</p>
+            <h1 class="playlist-big-title">Playlists</h1>
+          </div>
+        </div>
+      </div>
+      <div class="page-content-area">
+        <div class="playlist-actions-bar">
+          <button id="open-create-playlist-modal" class="green-btn">
+            <i class="fa-solid fa-plus"></i> New Playlist
+          </button>
+        </div>
+        <div id="playlists-grid" class="playlists-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD SONG / UPLOAD PAGE -->
+    <div id="add-song-page" class="page-section" style="display:none;">
+      <div class="page-gradient-header upload-header-bg">
+        <h1 class="upload-page-title">Upload Music</h1>
+        <p class="upload-page-subtitle">Add your own songs to your Musicify library</p>
+      </div>
+      <div class="page-content-area">
+        <div class="upload-card">
+          <form id="add-song-form" novalidate>
+
+            <div class="upload-drop-zone" id="upload-drop-zone">
+              <i class="fa-solid fa-cloud-arrow-up upload-drop-icon"></i>
+              <p class="upload-drop-title">Drag &amp; drop your audio file here</p>
+              <p class="upload-drop-sub">or</p>
+              <label for="song-audio-file" class="upload-browse-btn">Browse Files</label>
+              <input type="file" id="song-audio-file" accept="audio/*" style="display:none;" required>
+              <p class="upload-file-selected" id="upload-file-name">No file selected</p>
             </div>
 
-        </div>
-
-
-
-        <!-- ADD SONG PAGE -->
-        <div id="add-song-page" style="display:none;">
-
-            <h2>Add New Song</h2>
-
-            <form id="add-song-form">
-
-                <input
-                type="text"
-                id="song-title"
-                placeholder="Song Title"
-                required>
-
-                <input
-                type="text"
-                id="song-artist"
-                placeholder="Artist"
-                required>
-
-                <input
-                type="text"
-                id="song-album"
-                placeholder="Album"
-                required>
-
-                <input
-                type="text"
-                id="song-duration"
-                placeholder="Duration (e.g. 3:45)"
-                required>
-
-                <input
-                type="file"
-                id="song-audio-file"
-                accept="audio/*"
-                placeholder="Select Audio File"
-                required>
-
-                <button type="submit">
-                Add Song
-                </button>
-
-            </form>
-
-        </div>
-
-
-
-        <!-- PLAYLIST PAGE -->
-        <div id="playlists-page" style="display:none;">
-
-            <h2>🎶 Playlists</h2>
-
-
-            <!-- CREATE PLAYLIST -->
-            <form id="create-playlist-form">
-
-                <input
-                type="text"
-                id="playlist-name"
-                placeholder="Playlist Name"
-                required>
-
-                <button type="submit">
-                Create Playlist
-                </button>
-
-            </form>
-
-
-
-            <!-- ADD SONG TO PLAYLIST -->
-            <div id="add-to-playlist">
-
-                <h3>Add Song to Playlist</h3>
-
-                <select id="playlist-select"></select>
-
-                <select id="song-select"></select>
-
-                <button id="add-song-to-playlist">
-                Add Song
-                </button>
-
-            </div>
-
-
-            <div id="playlists-list"></div>
-
-        </div>
-
-        <!-- PROFILE PAGE -->
-        <div id="profile-page" style="display:none;">
-
-            <h2>👤 My Profile</h2>
-
-            <div id="profile-header">
-                <div class="profile-avatar">👤</div>
-                <div class="profile-details">
-                    <h3 id="profile-name">Loading...</h3>
-                    <p id="profile-email">Loading...</p>
+            <div class="upload-fields">
+              <div class="form-group">
+                <label for="song-title">Song Title *</label>
+                <input type="text" id="song-title" placeholder="e.g. Bohemian Rhapsody" required>
+                <div class="field-error" id="song-title-error"></div>
+              </div>
+              <div class="form-group">
+                <label for="song-artist">Artist *</label>
+                <input type="text" id="song-artist" placeholder="e.g. Queen" required>
+                <div class="field-error" id="song-artist-error"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="song-album">Album</label>
+                  <input type="text" id="song-album" placeholder="e.g. A Night at the Opera">
                 </div>
-            </div>
-
-            <div class="profile-section">
-                <h3>📊 Statistics</h3>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <p class="stat-label">Total Songs</p>
-                        <p class="stat-value" id="total-songs">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <p class="stat-label">Total Playlists</p>
-                        <p class="stat-value" id="total-playlists">0</p>
-                    </div>
+                <div class="form-group">
+                  <label for="song-duration">Duration</label>
+                  <input type="text" id="song-duration" placeholder="e.g. 5:55">
                 </div>
+              </div>
+              <button type="submit" id="add-song-btn" class="auth-submit-btn upload-submit-btn">
+                <span class="btn-text"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Song</span>
+                <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+              </button>
             </div>
 
-            <div class="profile-section">
-                <h3>🎵 Recent Songs</h3>
-                <div id="profile-songs-list"></div>
-            </div>
-
-            <div class="profile-section">
-                <h3>🎶 Your Playlists</h3>
-                <div id="profile-playlists-list"></div>
-            </div>
-
-            <button id="back-to-songs-btn" class="back-btn">← Back to Songs</button>
-
+          </form>
         </div>
+      </div>
+    </div>
 
-    </main>
+    <!-- PROFILE PAGE -->
+    <div id="profile-page" class="page-section" style="display:none;">
+      <div class="profile-header-section" id="profile-header-gradient">
+        <div class="profile-avatar-large" id="profile-avatar-large">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="profile-header-info">
+          <p class="profile-type-label">Profile</p>
+          <h1 class="profile-display-name" id="profile-name">Loading...</h1>
+          <p class="profile-meta" id="profile-email">Loading...</p>
+          <div class="profile-stats-inline">
+            <span><strong id="inline-total-songs">0</strong> songs</span>
+            <span><strong id="inline-total-playlists">0</strong> playlists</span>
+          </div>
+        </div>
+      </div>
+      <div class="page-content-area">
+        <div class="profile-section-block">
+          <h2 class="section-title">Your Songs</h2>
+          <div id="profile-songs-list" class="songs-table"></div>
+        </div>
+        <div class="profile-section-block">
+          <h2 class="section-title">Your Playlists</h2>
+          <div id="profile-playlists-list" class="playlists-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYLIST DETAIL PAGE -->
+    <div id="playlist-detail-page" class="page-section" style="display:none;">
+      <div class="playlist-detail-header" id="playlist-detail-header-bg">
+        <div class="playlist-detail-cover">
+          <i class="fa-solid fa-music"></i>
+        </div>
+        <div class="playlist-detail-meta">
+          <p class="playlist-type-label">Playlist</p>
+          <h1 class="playlist-detail-name" id="playlist-detail-name">Playlist Name</h1>
+          <p class="playlist-detail-info" id="playlist-detail-info">0 songs</p>
+        </div>
+      </div>
+      <div class="page-content-area">
+        <div class="playlist-controls-bar">
+          <button class="play-context-btn" id="play-playlist-btn">
+            <i class="fa-solid fa-play"></i>
+          </button>
+          <button class="context-shuffle-btn" id="shuffle-playlist-btn" title="Shuffle">
+            <i class="fa-solid fa-shuffle"></i>
+          </button>
+          <button class="context-more-btn" id="delete-playlist-btn" title="Delete playlist">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+        <div id="playlist-songs-list" class="songs-table"></div>
+      </div>
+    </div>
+
+  </main>
 
 </div>
 
+<!-- ==================== MUSIC PLAYER BAR ==================== -->
+<div id="player-bar" class="player-bar" style="display:none;">
 
+  <!-- Left: Song Info -->
+  <div class="player-left">
+    <div class="player-cover-art" id="player-cover-art">
+      <img id="player-cover-img" src="" alt="" onerror="this.parentElement.querySelector('.player-cover-placeholder').style.display='flex'; this.style.display='none';">
+      <div class="player-cover-placeholder"><i class="fa-solid fa-music"></i></div>
+    </div>
+    <div class="player-song-meta">
+      <div class="player-now-playing-row">
+        <div class="equalizer-bars" id="equalizer-bars">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <p class="player-song-title" id="now-playing-title">No song selected</p>
+      </div>
+      <p class="player-song-artist" id="now-playing-artist"></p>
+    </div>
+    <div class="player-like-area">
+      <button class="player-icon-btn like-btn" id="player-like-btn" aria-label="Save to Liked Songs">
+        <i class="fa-regular fa-heart"></i>
+      </button>
+    </div>
+  </div>
 
-<!-- MUSIC PLAYER BAR -->
-<div class="player">
+  <!-- Center: Controls + Progress -->
+  <div class="player-center">
+    <div class="player-controls">
+      <button class="player-icon-btn control-btn" id="shuffle-btn" aria-label="Shuffle" title="Shuffle">
+        <i class="fa-solid fa-shuffle"></i>
+      </button>
+      <button class="player-icon-btn control-btn prev-btn" id="prev-btn" aria-label="Previous">
+        <i class="fa-solid fa-backward-step"></i>
+      </button>
+      <button class="player-icon-btn play-pause-btn" id="play-pause-btn" aria-label="Play">
+        <i class="fa-solid fa-play" id="play-pause-icon"></i>
+      </button>
+      <button class="player-icon-btn control-btn next-btn" id="next-btn" aria-label="Next">
+        <i class="fa-solid fa-forward-step"></i>
+      </button>
+      <button class="player-icon-btn control-btn" id="repeat-btn" aria-label="Repeat" title="Repeat">
+        <i class="fa-solid fa-repeat"></i>
+      </button>
+    </div>
+    <div class="player-progress-row">
+      <span class="player-time" id="current-time">0:00</span>
+      <div class="progress-bar-container" id="progress-bar-container">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+          <div class="progress-bar-thumb" id="progress-bar-thumb"></div>
+        </div>
+      </div>
+      <span class="player-time" id="total-time">0:00</span>
+    </div>
+  </div>
 
-<strong>Now Playing:</strong>
+  <!-- Right: Volume + Extra -->
+  <div class="player-right">
+    <button class="player-icon-btn" id="queue-btn" aria-label="Queue" title="Queue">
+      <i class="fa-solid fa-list"></i>
+    </button>
+    <div class="volume-control">
+      <button class="player-icon-btn" id="volume-btn" aria-label="Mute">
+        <i class="fa-solid fa-volume-high" id="volume-icon"></i>
+      </button>
+      <div class="volume-bar-container" id="volume-bar-container">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="volume-bar-fill" style="width:70%"></div>
+          <div class="progress-bar-thumb" id="volume-bar-thumb" style="left:70%"></div>
+        </div>
+      </div>
+    </div>
+    <button class="player-icon-btn" id="fullscreen-btn" aria-label="Full screen" title="Now Playing View">
+      <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+    </button>
+  </div>
 
-<span id="now-playing">
-No song selected
-</span>
-
-<br><br>
-
-<audio id="audio-player" controls></audio>
+  <!-- Hidden native audio element -->
+  <audio id="audio-player"></audio>
 
 </div>
 
+<!-- ==================== NOW PLAYING CARD ==================== -->
+<div id="now-playing-card" class="now-playing-card" style="display:none;">
+
+  <!-- Blurred Background -->
+  <div class="npc-bg" id="npc-bg"></div>
+
+  <!-- Card Container -->
+  <div class="npc-container">
+
+    <!-- Header row -->
+    <div class="npc-header">
+      <button class="npc-icon-btn" id="npc-close-btn" title="Close">
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <div class="npc-header-label">
+        <span class="npc-header-from">NOW PLAYING</span>
+      </div>
+      <button class="npc-icon-btn" id="npc-options-btn" title="More options">
+        <i class="fa-solid fa-ellipsis"></i>
+      </button>
+    </div>
+
+    <!-- Album Art -->
+    <div class="npc-artwork-wrap">
+      <div class="npc-artwork" id="npc-artwork">
+        <img id="npc-cover-img" src="" alt="" style="display:none;">
+        <div class="npc-cover-placeholder" id="npc-cover-placeholder">
+          <i class="fa-solid fa-music"></i>
+        </div>
+        <!-- Vinyl ring overlay -->
+        <div class="npc-vinyl-ring"></div>
+      </div>
+    </div>
+
+    <!-- Song Info -->
+    <div class="npc-song-info">
+      <div class="npc-title-row">
+        <div class="npc-titles">
+          <h2 class="npc-song-title" id="npc-song-title">No song selected</h2>
+          <p class="npc-song-artist" id="npc-song-artist">—</p>
+        </div>
+        <button class="npc-like-btn" id="npc-like-btn" title="Save to Liked Songs">
+          <i class="fa-regular fa-heart"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="npc-progress-section">
+      <div class="npc-progress-bar-wrap" id="npc-progress-container">
+        <div class="npc-progress-track">
+          <div class="npc-progress-fill" id="npc-progress-fill"></div>
+          <div class="npc-progress-thumb" id="npc-progress-thumb"></div>
+        </div>
+      </div>
+      <div class="npc-times">
+        <span id="npc-current-time">0:00</span>
+        <span id="npc-total-time">0:00</span>
+      </div>
+    </div>
+
+    <!-- Main Controls -->
+    <div class="npc-controls">
+      <button class="npc-ctrl-btn npc-ctrl-secondary" id="npc-shuffle-btn" title="Shuffle">
+        <i class="fa-solid fa-shuffle"></i>
+      </button>
+      <button class="npc-ctrl-btn npc-ctrl-main" id="npc-prev-btn" title="Previous">
+        <i class="fa-solid fa-backward-step"></i>
+      </button>
+      <button class="npc-ctrl-btn npc-ctrl-play" id="npc-play-pause-btn" title="Play / Pause">
+        <i class="fa-solid fa-play" id="npc-play-pause-icon"></i>
+      </button>
+      <button class="npc-ctrl-btn npc-ctrl-main" id="npc-next-btn" title="Next">
+        <i class="fa-solid fa-forward-step"></i>
+      </button>
+      <button class="npc-ctrl-btn npc-ctrl-secondary" id="npc-repeat-btn" title="Repeat">
+        <i class="fa-solid fa-repeat"></i>
+      </button>
+    </div>
+
+    <!-- Extra Controls Row -->
+    <div class="npc-extra-controls">
+      <button class="npc-extra-btn" id="npc-volume-btn" title="Mute / Unmute">
+        <i class="fa-solid fa-volume-high" id="npc-volume-icon"></i>
+      </button>
+      <div class="npc-volume-wrap" id="npc-volume-container">
+        <div class="npc-progress-track">
+          <div class="npc-progress-fill" id="npc-volume-fill" style="width:70%"></div>
+          <div class="npc-progress-thumb" id="npc-volume-thumb" style="left:70%"></div>
+        </div>
+      </div>
+      <button class="npc-extra-btn" id="npc-queue-btn" title="Queue">
+        <i class="fa-solid fa-list"></i>
+      </button>
+    </div>
+
+    <!-- Songs Like This Section -->
+    <div class="npc-similar-section" id="npc-similar-section">
+      <div class="npc-similar-header">
+        <span class="npc-similar-title">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Songs like this
+        </span>
+        <span class="npc-similar-badge" id="npc-similar-status"></span>
+      </div>
+      <div class="npc-similar-list" id="npc-similar-list">
+        <div class="npc-similar-placeholder">
+          <div class="npc-similar-skeleton"></div>
+          <div class="npc-similar-skeleton"></div>
+          <div class="npc-similar-skeleton"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Create Playlist Modal -->
+<div id="create-playlist-modal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="create-playlist-modal-title">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2 id="create-playlist-modal-title">Create Playlist</h2>
+      <button class="modal-close-btn" id="close-create-playlist-modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <form id="create-playlist-form">
+      <div class="form-group">
+        <label for="playlist-name">Playlist name</label>
+        <input type="text" id="playlist-name" placeholder="My Playlist #1" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="ghost-btn" id="cancel-create-playlist">Cancel</button>
+        <button type="submit" class="green-btn">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add to Playlist Modal -->
+<div id="add-to-playlist-modal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="add-playlist-modal-title">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2 id="add-playlist-modal-title">Add to Playlist</h2>
+      <button class="modal-close-btn" id="close-add-to-playlist-modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="form-group">
+      <p class="modal-song-label" id="modal-adding-song-label"></p>
+    </div>
+    <div id="modal-playlists-list" class="modal-playlist-options">
+      <!-- Populated by JS -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="ghost-btn" id="cancel-add-to-playlist">Cancel</button>
+    </div>
+    <input type="hidden" id="modal-song-id">
+  </div>
+</div>
+
+<!-- Context Menu -->
+<div id="context-menu" class="context-menu" style="display:none;" role="menu">
+  <ul>
+    <li><button id="ctx-add-to-playlist" role="menuitem"><i class="fa-solid fa-plus"></i> Add to playlist</button></li>
+    <li><button id="ctx-like-song" role="menuitem"><i class="fa-regular fa-heart"></i> Save to Liked Songs</button></li>
+    <li class="context-divider"></li>
+    <li><button id="ctx-delete-song" role="menuitem" class="ctx-danger"><i class="fa-solid fa-trash"></i> Delete song</button></li>
+  </ul>
+</div>
 
 
 <script src="script.js"></script>
-
+<script src="similar.js"></script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+# Audio Similarity Pipeline — Python Dependencies
+# Tested on Python 3.13 / Windows
+#
+# Install:
+#   pip install -r requirements.txt --only-binary=:all:
+#
+# --only-binary avoids C compilation errors on Windows without Build Tools.
+# All packages listed here have pre-built wheels for Python 3.13 on Windows.
+
+numpy>=2.0        # numpy 1.x has no Python 3.13 wheels; 2.x does
+librosa           # audio feature extraction (MFCCs, chroma, spectral)
+soundfile         # MP3/WAV/FLAC codec backend for librosa
+soxr              # fast C-based resampler used by librosa (soxr_hq mode)
+resampy           # fallback resampler (kaiser_fast) — also installed for compat
+faiss-cpu         # Facebook AI Similarity Search — flat cosine index
+scipy             # required internally by librosa
+requests          # fetch song list from Node API
+tqdm              # progress bars for batch runs

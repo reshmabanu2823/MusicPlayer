@@ -1,0 +1,13 @@
+{
+  "name": "musicify",
+  "version": "1.0.0",
+  "description": "Musicify — Spotify-clone music streaming app",
+  "scripts": {
+    "start": "cd music-backend && node server.js",
+    "dev": "cd music-backend && npx nodemon server.js",
+    "install:backend": "cd music-backend && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
