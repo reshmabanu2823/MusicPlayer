@@ -1248,7 +1248,7 @@ function updateSidebarPlaylists(playlists) {
   const likedItem = document.createElement("div");
   likedItem.className = `sidebar-playlist-item ${state.currentPlaylistId === "liked-songs" ? "active" : ""}`;
   likedItem.innerHTML = `
-    <div class="sidebar-playlist-cover" style="background:linear-gradient(135deg,#450af5,#8e8ee5);color:#fff;">
+    <div class="sidebar-playlist-cover liked-cover">
       <i class="fa-solid fa-heart"></i>
     </div>
     <div class="sidebar-playlist-info">
@@ -1337,6 +1337,12 @@ function openLikedSongsDetail() {
 
   document.getElementById("playlist-detail-name").textContent = "Liked Songs";
   document.getElementById("playlist-detail-info").textContent = `${likedSongs.length} song${likedSongs.length !== 1 ? "s" : ""}`;
+
+  const detailCover = document.querySelector(".playlist-detail-cover");
+  if (detailCover) {
+    detailCover.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+    detailCover.className = "playlist-detail-cover liked-detail-cover";
+  }
 
   displaySongsTable(likedSongs, "playlist-songs-list");
 
