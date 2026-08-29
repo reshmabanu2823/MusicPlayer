@@ -472,10 +472,21 @@ function setupOtpInputs() {
    NAVIGATION
    ════════════════════════════════════════════════════════════ */
 function setupNavigation() {
+  const navHome = document.getElementById("nav-home");
+  if (navHome) {
+    navHome.addEventListener("click", (e) => {
+      e.preventDefault();
+      showPage("songs-page");
+      setSidebarActive("nav-songs");
+      showTopbarSearch(true);
+      loadSongs();
+    });
+  }
+
   document.getElementById("nav-songs").addEventListener("click", () => {
     showPage("songs-page");
     setSidebarActive("nav-songs");
-    showTopbarSearch(false);
+    showTopbarSearch(true);
     loadSongs();
   });
 
@@ -489,14 +500,14 @@ function setupNavigation() {
   document.getElementById("nav-playlists").addEventListener("click", () => {
     showPage("playlists-page");
     setSidebarActive("nav-playlists");
-    showTopbarSearch(false);
+    showTopbarSearch(true);
     loadPlaylists();
   });
 
   document.getElementById("nav-add-song").addEventListener("click", () => {
     showPage("add-song-page");
     setSidebarActive("nav-add-song");
-    showTopbarSearch(false);
+    showTopbarSearch(true);
   });
 
   const logoutHandler = () => {
@@ -1026,24 +1037,35 @@ function toggleLike(songId, btn) {
 function setupSearch() {
   const input = document.getElementById("search-input");
   const clearBtn = document.getElementById("clear-search-btn");
+  if (!input) return;
 
   input.addEventListener("input", (e) => {
     const q = e.target.value.trim();
-    clearBtn.style.display = q ? "flex" : "none";
+    if (clearBtn) clearBtn.style.display = q ? "flex" : "none";
     clearTimeout(state.searchTimeout);
     if (!q) {
       showSearchEmpty();
       return;
     }
-    state.searchTimeout = setTimeout(() => performSearch(q), 400);
+
+    // Switch to search page if not already visible
+    const searchPage = document.getElementById("search-page");
+    if (searchPage && searchPage.style.display === "none") {
+      showPage("search-page");
+      setSidebarActive("nav-search");
+    }
+
+    state.searchTimeout = setTimeout(() => performSearch(q), 300);
   });
 
-  clearBtn.addEventListener("click", () => {
-    input.value = "";
-    clearBtn.style.display = "none";
-    showSearchEmpty();
-    input.focus();
-  });
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      input.value = "";
+      clearBtn.style.display = "none";
+      showSearchEmpty();
+      input.focus();
+    });
+  }
 
   // Category card quick search
   document.querySelectorAll(".category-card").forEach(card => {
