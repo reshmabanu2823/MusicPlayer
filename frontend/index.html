@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lumina — Music Streaming</title>
-  <meta name="description" content="Lumina — Your personal music streaming platform. Listen to millions of songs for free.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231db954'/><text y='.9em' font-size='75' x='12'>🎵</text></svg>">
+  <title>Lumina — Play Music</title>
+  <meta name="description" content="Lumina — Soft Neumorphic Music Player with Aesthetic UI/UX.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='28' fill='%235f8870'/><text y='.78em' font-size='65' x='18'>🎵</text></svg>">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="similar.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Caveat:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -20,17 +20,12 @@
 
 <!-- ==================== AUTH SECTION ==================== -->
 <div id="auth-container">
-
-  <div class="auth-bg">
-    <div class="auth-orb orb-1"></div>
-    <div class="auth-orb orb-2"></div>
-    <div class="auth-orb orb-3"></div>
-  </div>
-
   <div class="auth-card-wrapper">
 
     <div class="auth-brand">
-      <i class="fa-solid fa-music auth-brand-icon"></i>
+      <div class="neu-badge-icon">
+        <i class="fa-solid fa-music"></i>
+      </div>
       <span class="auth-brand-name">Lumina</span>
     </div>
 
@@ -67,7 +62,7 @@
           </div>
           <div class="field-error" id="login-password-error"></div>
         </div>
-        <button type="submit" id="login-btn" class="auth-submit-btn">
+        <button type="submit" id="login-btn" class="neu-btn-primary auth-submit-btn">
           <span class="btn-text">Log In</span>
           <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
         </button>
@@ -105,13 +100,9 @@
               <i class="fa-regular fa-eye"></i>
             </button>
           </div>
-          <div class="password-strength" id="password-strength-bar">
-            <div class="strength-track"><div class="strength-fill" id="strength-fill"></div></div>
-            <span class="strength-label" id="strength-label"></span>
-          </div>
           <div class="field-error" id="register-password-error"></div>
         </div>
-        <button type="submit" id="register-btn" class="auth-submit-btn">
+        <button type="submit" id="register-btn" class="neu-btn-primary auth-submit-btn">
           <span class="btn-text">Create Account</span>
           <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
         </button>
@@ -129,14 +120,14 @@
         <i class="fa-solid fa-arrow-left"></i>
       </button>
       <h1 class="auth-title">Reset your password</h1>
-      <p class="auth-subtitle">Enter the email address associated with your account and we'll send you an OTP.</p>
+      <p class="auth-subtitle">Enter your email and we'll send you an OTP.</p>
       <form id="forgot-password-form" novalidate>
         <div class="form-group">
           <label for="forgot-email">Email address</label>
           <input type="email" id="forgot-email" placeholder="name@example.com" autocomplete="email" required>
           <div class="field-error" id="forgot-email-error"></div>
         </div>
-        <button type="submit" id="forgot-btn" class="auth-submit-btn">
+        <button type="submit" id="forgot-btn" class="neu-btn-primary auth-submit-btn">
           <span class="btn-text">Send OTP</span>
           <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
         </button>
@@ -148,56 +139,52 @@
       <button class="back-auth-btn" id="back-to-forgot">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
-      <h1 class="auth-title">Enter the OTP</h1>
-      <p class="auth-subtitle" id="otp-sent-to">We've sent a 6-digit code to your email.</p>
+      <h1 class="auth-title">Enter Verification Code</h1>
+      <p class="auth-subtitle">Check your email for the 6-digit code.</p>
       <form id="verify-otp-form" novalidate>
-        <div class="form-group">
-          <div class="otp-inputs">
-            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
-            <input type="text" class="otp-digit" maxlength="1" inputmode="numeric" pattern="[0-9]">
-          </div>
-          <input type="hidden" id="otp-input">
-          <div class="field-error" id="otp-error"></div>
+        <div class="otp-inputs" id="otp-inputs-container">
+          <input type="text" class="otp-digit" maxlength="1" pattern="\d*" inputmode="numeric" required autocomplete="off">
+          <input type="text" class="otp-digit" maxlength="1" pattern="\d*" inputmode="numeric" required autocomplete="off">
+          <input type="text" class="otp-digit" maxlength="1" pattern="\d*" inputmode="numeric" required autocomplete="off">
+          <input type="text" class="otp-digit" maxlength="1" pattern="\d*" inputmode="numeric" required autocomplete="off">
+          <input type="text" class="otp-digit" maxlength="1" pattern="\d*" inputmode="numeric" required autocomplete="off">
+          <input type="text" class="otp-digit" maxlength="1" pattern="\d*" inputmode="numeric" required autocomplete="off">
         </div>
-        <button type="submit" id="verify-otp-btn" class="auth-submit-btn">
-          <span class="btn-text">Verify OTP</span>
+        <input type="hidden" id="otp-combined-value">
+        <div class="field-error" id="otp-error" style="text-align:center;"></div>
+        <button type="submit" id="verify-otp-btn" class="neu-btn-primary auth-submit-btn">
+          <span class="btn-text">Verify Code</span>
           <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
         </button>
       </form>
-      <p class="resend-otp">Didn't receive it? <a href="#" id="resend-otp-btn">Resend OTP</a></p>
     </div>
 
     <!-- RESET PASSWORD PAGE -->
     <div id="reset-password-page" class="auth-card" style="display:none;">
-      <h1 class="auth-title">Create new password</h1>
-      <p class="auth-subtitle">Your new password must be different from your previous password.</p>
+      <h1 class="auth-title">Set New Password</h1>
       <form id="reset-password-form" novalidate>
         <div class="form-group">
-          <label for="reset-new-password">New Password</label>
+          <label for="new-password">New password</label>
           <div class="input-password-wrapper">
-            <input type="password" id="reset-new-password" placeholder="New password" required>
-            <button type="button" class="toggle-password" data-target="reset-new-password" aria-label="Show password">
+            <input type="password" id="new-password" placeholder="New password" autocomplete="new-password" required>
+            <button type="button" class="toggle-password" data-target="new-password" aria-label="Show password">
               <i class="fa-regular fa-eye"></i>
             </button>
           </div>
-          <div class="field-error" id="reset-password-error"></div>
+          <div class="field-error" id="new-password-error"></div>
         </div>
         <div class="form-group">
-          <label for="reset-confirm-password">Confirm New Password</label>
+          <label for="confirm-password">Confirm new password</label>
           <div class="input-password-wrapper">
-            <input type="password" id="reset-confirm-password" placeholder="Confirm new password" required>
-            <button type="button" class="toggle-password" data-target="reset-confirm-password" aria-label="Show password">
+            <input type="password" id="confirm-password" placeholder="Confirm new password" autocomplete="new-password" required>
+            <button type="button" class="toggle-password" data-target="confirm-password" aria-label="Show password">
               <i class="fa-regular fa-eye"></i>
             </button>
           </div>
-          <div class="field-error" id="reset-confirm-error"></div>
+          <div class="field-error" id="confirm-password-error"></div>
         </div>
-        <button type="submit" id="reset-btn" class="auth-submit-btn">
-          <span class="btn-text">Reset Password</span>
+        <button type="submit" id="reset-password-btn" class="neu-btn-primary auth-submit-btn">
+          <span class="btn-text">Update Password</span>
           <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
         </button>
       </form>
@@ -206,569 +193,426 @@
   </div>
 </div>
 
-
 <!-- ==================== MAIN APP ==================== -->
 <div id="main-app" style="display:none;">
 
-  <!-- LEFT SIDEBAR -->
-  <nav id="sidebar">
+  <!-- SOFT NEUMORPHIC HERO STAGE -->
+  <div class="neu-stage">
 
-    <!-- Logo -->
-    <div class="sidebar-logo">
-      <a href="#" id="nav-home" class="logo-link">
-        <i class="fa-solid fa-music logo-icon"></i>
-        <span class="logo-text">Lumina</span>
-      </a>
-    </div>
+    <!-- MASTER CLAYMORPHIC PLAYER CARD -->
+    <div class="neu-master-card" id="neu-master-card">
 
-    <!-- Main Nav -->
-    <ul class="sidebar-nav" role="navigation" aria-label="Main navigation">
-      <li>
-        <a href="#" id="nav-songs" class="sidebar-link active" aria-label="Home">
-          <i class="fa-solid fa-house sidebar-icon"></i>
-          <span>Home</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" id="nav-search" class="sidebar-link" aria-label="Search">
-          <i class="fa-solid fa-magnifying-glass sidebar-icon"></i>
-          <span>Search</span>
-        </a>
-      </li>
-    </ul>
+      <!-- Top Floating Octagon Badge & Header -->
+      <div class="neu-card-topbar">
+        
+        <!-- Left Octagonal Music Note Icon -->
+        <div class="neu-octagon-badge" title="Lumina Audio">
+          <div class="neu-octagon-inner">
+            <i class="fa-solid fa-music note-primary"></i>
+            <i class="fa-solid fa-music note-secondary"></i>
+            <i class="fa-solid fa-music note-tertiary"></i>
+          </div>
+        </div>
+        
+        <!-- Center Header -->
+        <div class="neu-header-center">
+          <h2 class="neu-play-music-title">Play Music</h2>
+        </div>
 
-    <!-- Library Section -->
-    <div class="sidebar-library">
-      <div class="library-header">
-        <button class="library-title-btn" id="nav-playlists" aria-label="Your Library">
-          <i class="fa-solid fa-book sidebar-icon"></i>
-          <span>Your Library</span>
+        <!-- Right Playlist / Menu Toggle -->
+        <button class="neu-icon-btn-pill" id="drawer-toggle-btn" aria-label="Open Music Library & Queue" title="Open Library">
+          <i class="fa-solid fa-list-ul"></i>
         </button>
-        <button class="library-add-btn" id="create-playlist-quick-btn" aria-label="Create playlist" title="Create playlist">
-          <i class="fa-solid fa-plus"></i>
-        </button>
+
       </div>
 
-      <div id="sidebar-playlists" class="sidebar-playlists-list">
-        <div class="sidebar-playlist-empty">
-          <p>Create your first playlist</p>
-          <button id="create-first-playlist-btn" class="pill-btn">Create playlist</button>
+      <!-- Hero Circular Artwork Window (Recessed Inset Well) -->
+      <div class="neu-portal-container">
+        <div class="neu-circular-portal" id="neu-circular-portal">
+          <div class="neu-portal-well">
+            <img id="player-cover-img" src="" alt="Album Artwork" onerror="this.parentElement.querySelector('.neu-cover-fallback').style.display='flex'; this.style.display='none';">
+            <div class="neu-cover-fallback" style="display:none;">
+              <i class="fa-solid fa-compact-disc neu-spin-disc"></i>
+            </div>
+            <!-- Glass Inner Glare Overlay -->
+            <div class="neu-portal-glare"></div>
+          </div>
+        </div>
+
+        <!-- Floating Extruded Equalizer Badge (Top-Right) -->
+        <div class="neu-floating-badge neu-eq-badge" title="Equalizer">
+          <div class="neu-brick-eq" id="neu-brick-eq">
+            <div class="eq-brick-col"><span class="brick active"></span><span class="brick active"></span><span class="brick"></span></div>
+            <div class="eq-brick-col"><span class="brick active"></span><span class="brick active"></span><span class="brick active"></span></div>
+            <div class="eq-brick-col"><span class="brick active"></span><span class="brick active"></span><span class="brick"></span></div>
+            <div class="eq-brick-col"><span class="brick active"></span><span class="brick"></span><span class="brick"></span></div>
+          </div>
+        </div>
+
+        <!-- Floating Extruded Instrument Badge (Bottom-Right) -->
+        <div class="neu-floating-badge neu-instrument-badge" title="Acoustic Vibes">
+          <i class="fa-solid fa-guitar instrument-icon"></i>
+          <i class="fa-solid fa-guitar instrument-icon alt"></i>
+        </div>
+
+      </div>
+
+      <!-- Song Meta (Title & Artist) -->
+      <div class="neu-meta-section">
+        <h1 class="neu-song-title" id="now-playing-title">No song selected</h1>
+        <p class="neu-song-artist" id="now-playing-artist">Choose a track to play</p>
+      </div>
+
+      <!-- Scrubber & Timestamps -->
+      <div class="neu-scrubber-section">
+        <div class="neu-time-row">
+          <span class="neu-timestamp" id="current-time">00.00</span>
+          <span class="neu-timestamp" id="total-time">00.00</span>
+        </div>
+        <div class="neu-track-well" id="progress-bar-container">
+          <div class="neu-track-fill" id="progress-bar-fill" style="width:0%"></div>
+          <div class="neu-track-thumb" id="progress-bar-thumb" style="left:0%"></div>
         </div>
       </div>
+
+      <!-- Action Row (Fullscreen / Share & Like Heart) -->
+      <div class="neu-actions-row">
+        <button class="neu-action-icon-btn" id="fullscreen-btn" title="Open Fullscreen Player">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </button>
+        <button class="neu-action-icon-btn" id="player-like-btn" title="Save to Liked Songs">
+          <i class="fa-regular fa-heart"></i>
+        </button>
+      </div>
+
+      <!-- Playback Controls Cluster -->
+      <div class="neu-controls-row">
+        
+        <!-- Repeat / Loop Toggle -->
+        <button class="neu-ctrl-pill-btn" id="repeat-btn" title="Repeat">
+          <i class="fa-solid fa-repeat"></i>
+        </button>
+
+        <!-- Previous Button -->
+        <button class="neu-ctrl-circle-btn" id="prev-btn" title="Previous Track">
+          <i class="fa-solid fa-backward-step"></i>
+        </button>
+
+        <!-- Master Center Play/Pause Button -->
+        <button class="neu-play-master-btn" id="play-pause-btn" title="Play / Pause">
+          <div class="neu-play-inner-ring">
+            <i class="fa-solid fa-play" id="play-pause-icon"></i>
+          </div>
+        </button>
+
+        <!-- Next Button -->
+        <button class="neu-ctrl-circle-btn" id="next-btn" title="Next Track">
+          <i class="fa-solid fa-forward-step"></i>
+        </button>
+
+        <!-- Shuffle Toggle -->
+        <button class="neu-ctrl-pill-btn" id="shuffle-btn" title="Shuffle">
+          <i class="fa-solid fa-shuffle"></i>
+        </button>
+
+      </div>
+
+      <!-- Floating Bottom Dock Navigation -->
+      <div class="neu-bottom-dock">
+        <button class="neu-dock-btn" id="dock-library-btn" title="All Songs & Playlists">
+          <i class="fa-solid fa-music"></i>
+        </button>
+        <button class="neu-dock-btn active" id="dock-home-btn" title="Home & Search">
+          <i class="fa-solid fa-house"></i>
+        </button>
+        <button class="neu-dock-btn" id="dock-profile-btn" title="Profile & Upload">
+          <i class="fa-solid fa-user"></i>
+        </button>
+      </div>
+
     </div>
 
-    <!-- Sidebar Footer -->
-    <div class="sidebar-footer">
-      <a href="#" id="nav-add-song" class="sidebar-footer-link" title="Upload a song">
-        <i class="fa-solid fa-cloud-arrow-up"></i>
-        <span>Upload Music</span>
-      </a>
-      <button id="nav-logout" class="sidebar-footer-link logout-btn" title="Log out">
-        <i class="fa-solid fa-right-from-bracket"></i>
-        <span>Log Out</span>
+    <!-- Soft Signature Watermark -->
+    <div class="neu-brand-signature">
+      <span class="sig-script">lumina audio</span>
+      <span class="sig-handle">@lumina_music</span>
+    </div>
+
+  </div>
+
+  <!-- SLIDING CLAYMORPHIC DRAWER (Library, Search, Playlists, Upload, Profile) -->
+  <aside class="neu-drawer" id="neu-drawer">
+    
+    <!-- Drawer Top Header -->
+    <div class="neu-drawer-header">
+      <div class="neu-drawer-search-wrap">
+        <i class="fa-solid fa-magnifying-glass neu-search-icon"></i>
+        <input type="text" id="search-input" placeholder="Search songs, artists, albums..." autocomplete="off">
+        <button id="clear-search-btn" class="neu-clear-btn" style="display:none;" aria-label="Clear search">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <button class="neu-drawer-close-btn" id="neu-drawer-close" title="Close Library">
+        <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
 
-  </nav>
-
-  <!-- MAIN CONTENT AREA -->
-  <main id="content">
-
-    <!-- TOP BAR -->
-    <div id="topbar">
-      <div class="topbar-nav">
-        <button id="topbar-back" class="topbar-nav-btn" aria-label="Go back">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <button id="topbar-forward" class="topbar-nav-btn" aria-label="Go forward">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
-      </div>
-      <div class="topbar-search-wrap" id="topbar-search-wrap">
-        <div class="topbar-search-box">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="search-input" placeholder="Search songs, artists, albums..." autocomplete="off">
-          <button id="clear-search-btn" class="clear-search" style="display:none;" aria-label="Clear search">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-      </div>
-      <div class="topbar-user">
-        <button id="profile-btn" class="profile-avatar-btn" aria-label="Profile">
-          <div class="profile-avatar-circle" id="profile-avatar-circle">
-            <i class="fa-solid fa-user"></i>
-          </div>
-          <span id="topbar-username">User</span>
-          <i class="fa-solid fa-chevron-down"></i>
-        </button>
-        <div id="profile-dropdown" class="profile-dropdown" style="display:none;">
-          <a href="#" id="dropdown-profile">
-            <i class="fa-solid fa-user"></i> Profile
-          </a>
-          <a href="#" id="dropdown-upload">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Song
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" id="dropdown-logout" class="logout-option">
-            <i class="fa-solid fa-right-from-bracket"></i> Log Out
-          </a>
-        </div>
-      </div>
+    <!-- Category Filter Tabs -->
+    <div class="neu-tabs-row">
+      <button class="neu-tab-btn active" id="tab-all-songs"><i class="fa-solid fa-music"></i> All Songs</button>
+      <button class="neu-tab-btn" id="tab-recent"><i class="fa-solid fa-clock-rotate-left"></i> Recent</button>
+      <button class="neu-tab-btn" id="tab-playlists"><i class="fa-solid fa-compact-disc"></i> Playlists</button>
+      <button class="neu-tab-btn" id="tab-genres"><i class="fa-solid fa-icons"></i> Genres</button>
+      <button class="neu-tab-btn" id="tab-upload"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+      <button class="neu-tab-btn" id="tab-profile"><i class="fa-solid fa-user"></i> Profile</button>
     </div>
 
-    <!-- HOME / SONGS PAGE -->
-    <div id="songs-page" class="page-section">
-      <div class="page-gradient-header" id="songs-header-gradient">
-        <h1 class="page-greeting" id="page-greeting">Good evening</h1>
-        <div class="featured-grid" id="featured-grid">
-          <!-- Featured quick-access tiles will be inserted by JS -->
+    <!-- Drawer Content Views -->
+    <div class="neu-drawer-body" id="neu-drawer-body">
+      
+      <!-- ALL SONGS / HOME VIEW -->
+      <div id="songs-page" class="page-section">
+        
+        <!-- Recently Played Section -->
+        <div class="neu-section-block" id="recent-section-block">
+          <div class="neu-section-head">
+            <h3 class="neu-section-heading">Recently Played</h3>
+          </div>
+          <div id="recent-songs-row" class="cards-row"></div>
         </div>
-      </div>
 
-      <div class="page-content-area">
-        <section class="section-block">
-          <div class="section-header">
-            <h2 class="section-title">Recently Played</h2>
-            <a href="#" class="see-all-link">See all</a>
-          </div>
-          <div id="recent-songs-row" class="cards-row">
-            <!-- Populated by JS -->
-          </div>
-        </section>
+        <!-- Featured Grid (Hidden or available) -->
+        <div id="featured-grid" style="display:none;"></div>
 
-        <section class="section-block">
-          <div class="section-header">
-            <h2 class="section-title">All Songs</h2>
+        <!-- All Songs Table -->
+        <div class="neu-section-block">
+          <div class="neu-section-head">
+            <h3 class="neu-section-heading">All Tracks</h3>
+            <span class="neu-badge-count" id="total-songs-count">0 songs</span>
           </div>
-          <div id="songs-list" class="songs-table">
-            <!-- Populated by JS -->
-          </div>
+          <div id="songs-list" class="songs-table"></div>
           <div id="songs-loading" class="loading-skeleton" style="display:none;">
             <div class="skeleton-row"></div>
             <div class="skeleton-row"></div>
             <div class="skeleton-row"></div>
-            <div class="skeleton-row"></div>
-            <div class="skeleton-row"></div>
           </div>
-        </section>
-      </div>
-    </div>
+        </div>
 
-    <!-- SEARCH PAGE -->
-    <div id="search-page" class="page-section" style="display:none;">
-      <div class="page-content-area">
+      </div>
+
+      <!-- SEARCH RESULTS VIEW -->
+      <div id="search-page" class="page-section" style="display:none;">
         <div id="search-empty-state" class="search-empty">
           <i class="fa-solid fa-magnifying-glass search-empty-icon"></i>
-          <h2>Search for songs, artists, albums</h2>
-          <p>Find anything you're looking for.</p>
+          <h2>Explore Genres &amp; Tracks</h2>
           <div class="browse-categories">
-            <div class="category-card" data-genre="Pop" style="--cat-color:#e13300;">
+            <div class="category-card" data-genre="Pop" style="--cat-color:#d49a7a;">
               <span>Pop</span><i class="fa-solid fa-music cat-icon"></i>
             </div>
-            <div class="category-card" data-genre="Hip-Hop" style="--cat-color:#503750;">
+            <div class="category-card" data-genre="Hip-Hop" style="--cat-color:#8e798e;">
               <span>Hip-Hop</span><i class="fa-solid fa-headphones cat-icon"></i>
             </div>
-            <div class="category-card" data-genre="Rock" style="--cat-color:#1e3264;">
+            <div class="category-card" data-genre="Rock" style="--cat-color:#657b8a;">
               <span>Rock</span><i class="fa-solid fa-guitar cat-icon"></i>
             </div>
-            <div class="category-card" data-genre="Electronic" style="--cat-color:#477d95;">
+            <div class="category-card" data-genre="Electronic" style="--cat-color:#718f84;">
               <span>Electronic</span><i class="fa-solid fa-bolt cat-icon"></i>
             </div>
-            <div class="category-card" data-genre="R&amp;B" style="--cat-color:#e8115b;">
+            <div class="category-card" data-genre="R&amp;B" style="--cat-color:#a87282;">
               <span>R&amp;B</span><i class="fa-solid fa-heart cat-icon"></i>
             </div>
-            <div class="category-card" data-genre="Jazz" style="--cat-color:#608108;">
-              <span>Jazz</span><i class="fa-solid fa-compact-disc cat-icon"></i>
-            </div>
           </div>
-
-          <!-- Segregated Genre Sections -->
-          <div id="genre-segregated-container" style="margin-top:36px;text-align:left;">
-            <div class="section-header" style="margin-bottom:16px;">
-              <h2 class="section-title" style="font-size:20px;font-weight:800;color:#fff;">Songs by Genre</h2>
-            </div>
+          <div id="genre-segregated-container" style="margin-top:28px;">
+            <h3 class="neu-section-heading" style="margin-bottom:12px;">Songs by Genre</h3>
             <div id="genre-sections-list"></div>
           </div>
         </div>
-
         <div id="search-results" style="display:none;">
-          <h2 class="search-results-title">Results for "<span id="search-query-display"></span>"</h2>
+          <h3 class="neu-section-heading">Results for "<span id="search-query-display"></span>"</h3>
           <div id="search-songs-list" class="songs-table"></div>
         </div>
       </div>
-    </div>
 
-    <!-- PLAYLISTS PAGE -->
-    <div id="playlists-page" class="page-section" style="display:none;">
-      <div class="page-gradient-header playlist-header-bg">
-        <div class="playlist-header-content">
-          <div class="playlist-header-icon">
-            <i class="fa-solid fa-music"></i>
-          </div>
-          <div>
-            <p class="playlist-type-label">Your Library</p>
-            <h1 class="playlist-big-title">Playlists</h1>
-          </div>
-        </div>
-      </div>
-      <div class="page-content-area">
-        <div class="playlist-actions-bar">
-          <button id="open-create-playlist-modal" class="green-btn">
+      <!-- PLAYLISTS VIEW -->
+      <div id="playlists-page" class="page-section" style="display:none;">
+        <div class="neu-section-head" style="margin-bottom:16px;">
+          <h3 class="neu-section-heading">Your Playlists</h3>
+          <button id="open-create-playlist-modal" class="neu-btn-pill-accent">
             <i class="fa-solid fa-plus"></i> New Playlist
           </button>
         </div>
-        <div id="playlists-grid" class="playlists-grid">
-          <!-- Populated by JS -->
+        <div id="playlists-grid" class="playlists-grid"></div>
+      </div>
+
+      <!-- PLAYLIST DETAIL VIEW -->
+      <div id="playlist-detail-page" class="page-section" style="display:none;">
+        <div class="neu-playlist-detail-head">
+          <div class="neu-playlist-detail-cover">
+            <i class="fa-solid fa-music"></i>
+          </div>
+          <div>
+            <span class="neu-badge-label">PLAYLIST</span>
+            <h2 class="neu-playlist-name" id="playlist-detail-name">Playlist Name</h2>
+            <p class="neu-playlist-info" id="playlist-detail-info">0 songs</p>
+          </div>
         </div>
+        <div class="neu-playlist-actions">
+          <button class="neu-btn-pill-accent" id="play-playlist-btn"><i class="fa-solid fa-play"></i> Play</button>
+          <button class="neu-ctrl-pill-btn" id="shuffle-playlist-btn" title="Shuffle"><i class="fa-solid fa-shuffle"></i></button>
+          <button class="neu-ctrl-pill-btn" id="delete-playlist-btn" title="Delete playlist"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <div id="playlist-songs-list" class="songs-table"></div>
       </div>
-    </div>
 
-    <!-- ADD SONG / UPLOAD PAGE -->
-    <div id="add-song-page" class="page-section" style="display:none;">
-      <div class="page-gradient-header upload-header-bg">
-        <h1 class="upload-page-title">Upload Music</h1>
-        <p class="upload-page-subtitle">Add your own songs to your Lumina library</p>
-      </div>
-      <div class="page-content-area">
-        <div class="upload-card">
+      <!-- UPLOAD SONG VIEW -->
+      <div id="add-song-page" class="page-section" style="display:none;">
+        <div class="neu-upload-card">
+          <h3 class="neu-section-heading" style="margin-bottom:12px;">Upload Music</h3>
           <form id="add-song-form" novalidate>
-
             <div class="upload-drop-zone" id="upload-drop-zone">
               <i class="fa-solid fa-cloud-arrow-up upload-drop-icon"></i>
-              <p class="upload-drop-title">Drag &amp; drop your audio file here</p>
-              <p class="upload-drop-sub">or</p>
-              <label for="song-audio-file" class="upload-browse-btn">Browse Files</label>
+              <p class="upload-drop-title">Drag &amp; drop audio file here</p>
+              <label for="song-audio-file" class="neu-btn-pill-accent" style="margin-top:10px;display:inline-block;cursor:pointer;">Browse Audio</label>
               <input type="file" id="song-audio-file" accept="audio/*" style="display:none;" required>
               <p class="upload-file-selected" id="upload-file-name">No file selected</p>
             </div>
-
-            <div class="upload-fields">
-              <div class="form-group">
-                <label for="song-title">Song Title *</label>
-                <input type="text" id="song-title" placeholder="e.g. Bohemian Rhapsody" required>
-                <div class="field-error" id="song-title-error"></div>
-              </div>
-              <div class="form-group">
-                <label for="song-artist">Artist *</label>
-                <input type="text" id="song-artist" placeholder="e.g. Queen" required>
-                <div class="field-error" id="song-artist-error"></div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="song-album">Album</label>
-                  <input type="text" id="song-album" placeholder="e.g. A Night at the Opera">
-                </div>
-                <div class="form-group">
-                  <label for="song-genre">Genre</label>
-                  <select id="song-genre" style="width:100%;padding:10px 14px;border-radius:var(--radius-md);border:1px solid var(--border-mid);background:var(--bg-card);color:#fff;font-size:14px;">
-                    <option value="Pop">Pop</option>
-                    <option value="Hip-Hop">Hip-Hop</option>
-                    <option value="Rock">Rock</option>
-                    <option value="Electronic">Electronic</option>
-                    <option value="R&B">R&B</option>
-                    <option value="Jazz">Jazz</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="song-duration">Duration</label>
-                <input type="text" id="song-duration" placeholder="e.g. 5:55">
-              </div>
-
-              <button type="submit" id="add-song-btn" class="auth-submit-btn upload-submit-btn">
-                <span class="btn-text"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Song</span>
-                <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
-              </button>
+            <div class="form-group">
+              <label for="song-title">Song Title *</label>
+              <input type="text" id="song-title" placeholder="e.g. Treat You Better" required>
+              <div class="field-error" id="song-title-error"></div>
             </div>
-
+            <div class="form-group">
+              <label for="song-artist">Artist *</label>
+              <input type="text" id="song-artist" placeholder="e.g. Shawn Mendes" required>
+              <div class="field-error" id="song-artist-error"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="song-album">Album</label>
+                <input type="text" id="song-album" placeholder="e.g. Illuminate">
+              </div>
+              <div class="form-group">
+                <label for="song-genre">Genre</label>
+                <select id="song-genre" class="neu-select">
+                  <option value="Pop">Pop</option>
+                  <option value="Hip-Hop">Hip-Hop</option>
+                  <option value="Rock">Rock</option>
+                  <option value="Electronic">Electronic</option>
+                  <option value="R&B">R&B</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" id="add-song-btn" class="neu-btn-primary auth-submit-btn">
+              <span class="btn-text"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Track</span>
+              <span class="btn-spinner" style="display:none"><i class="fa-solid fa-circle-notch fa-spin"></i></span>
+            </button>
           </form>
         </div>
       </div>
-    </div>
 
-    <!-- PROFILE PAGE -->
-    <div id="profile-page" class="page-section" style="display:none;">
-      <div class="profile-header-section" id="profile-header-gradient">
-        <div class="profile-avatar-large" id="profile-avatar-large">
-          <i class="fa-solid fa-user"></i>
-        </div>
-        <div class="profile-header-info">
-          <p class="profile-type-label">Profile</p>
-          <h1 class="profile-display-name" id="profile-name">Loading...</h1>
-          <p class="profile-meta" id="profile-email">Loading...</p>
-          <div class="profile-stats-inline">
-            <span><strong id="inline-total-songs">0</strong> songs</span>
-            <span><strong id="inline-total-playlists">0</strong> playlists</span>
+      <!-- PROFILE VIEW -->
+      <div id="profile-page" class="page-section" style="display:none;">
+        <div class="neu-profile-card">
+          <div class="neu-profile-avatar" id="profile-avatar-large">
+            <i class="fa-solid fa-user"></i>
           </div>
-        </div>
-      </div>
-      <div class="page-content-area">
-        <div class="profile-section-block">
-          <h2 class="section-title">Your Songs</h2>
-          <div id="profile-songs-list" class="songs-table"></div>
-        </div>
-        <div class="profile-section-block">
-          <h2 class="section-title">Your Playlists</h2>
-          <div id="profile-playlists-list" class="playlists-grid"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PLAYLIST DETAIL PAGE -->
-    <div id="playlist-detail-page" class="page-section" style="display:none;">
-      <div class="playlist-detail-header" id="playlist-detail-header-bg">
-        <div class="playlist-detail-cover">
-          <i class="fa-solid fa-music"></i>
-        </div>
-        <div class="playlist-detail-meta">
-          <p class="playlist-type-label">Playlist</p>
-          <h1 class="playlist-detail-name" id="playlist-detail-name">Playlist Name</h1>
-          <p class="playlist-detail-info" id="playlist-detail-info">0 songs</p>
-        </div>
-      </div>
-      <div class="page-content-area">
-        <div class="playlist-controls-bar">
-          <button class="play-context-btn" id="play-playlist-btn">
-            <i class="fa-solid fa-play"></i>
-          </button>
-          <button class="context-shuffle-btn" id="shuffle-playlist-btn" title="Shuffle">
-            <i class="fa-solid fa-shuffle"></i>
-          </button>
-          <button class="green-btn" id="add-songs-to-playlist-btn" style="border-radius:20px;padding:8px 18px;margin-left:8px;font-size:13px;" title="Find songs to add">
-            <i class="fa-solid fa-plus"></i> Add Songs
-          </button>
-          <button class="context-more-btn" id="delete-playlist-btn" title="Delete playlist">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </div>
-        <div id="playlist-songs-list" class="songs-table"></div>
-        
-        <!-- Add songs to this playlist section -->
-        <div id="playlist-add-suggestions" style="margin-top:36px;border-top:1px solid var(--border-subtle);padding-top:24px;display:none;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <div>
-              <h2 style="font-size:18px;font-weight:700;margin:0;color:var(--text-primary);">Add songs to this playlist</h2>
-              <p style="font-size:12px;color:var(--text-secondary);margin:4px 0 0;">Based on what's in your library</p>
-            </div>
-            <div style="position:relative;width:240px;">
-              <input type="text" id="playlist-suggest-search" placeholder="Search songs..." style="width:100%;padding:6px 12px;border-radius:16px;border:1px solid var(--border-mid);background:var(--bg-card);color:#fff;font-size:12px;">
-            </div>
+          <h2 class="neu-profile-name" id="profile-name">User</h2>
+          <p class="neu-profile-email" id="profile-email">user@app.com</p>
+          <div class="neu-profile-stats">
+            <div class="stat-pill"><strong id="inline-total-songs">0</strong> songs</div>
+            <div class="stat-pill"><strong id="inline-total-playlists">0</strong> playlists</div>
           </div>
-          <div id="playlist-suggest-list" class="songs-table"></div>
+          <button id="nav-logout" class="neu-logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
         </div>
       </div>
+
     </div>
 
+  </aside>
 
-  </main>
-
-</div>
-
-<!-- ==================== MUSIC PLAYER BAR ==================== -->
-<div id="player-bar" class="player-bar" style="display:none;">
-
-  <!-- Left: Song Info -->
-  <div class="player-left">
-    <div class="player-cover-art" id="player-cover-art">
-      <img id="player-cover-img" src="" alt="" onerror="this.parentElement.querySelector('.player-cover-placeholder').style.display='flex'; this.style.display='none';">
-      <div class="player-cover-placeholder"><i class="fa-solid fa-music"></i></div>
+  <!-- HIDDEN COMPATIBILITY CONTAINERS FOR SCRIPT.JS BINDINGS -->
+  <div style="display:none;">
+    <button id="nav-home"></button>
+    <button id="nav-songs"></button>
+    <button id="nav-search"></button>
+    <button id="nav-playlists"></button>
+    <button id="nav-add-song"></button>
+    <button id="profile-btn"></button>
+    <div id="profile-dropdown">
+      <a href="#" id="dropdown-profile"></a>
+      <a href="#" id="dropdown-upload"></a>
+      <a href="#" id="dropdown-logout"></a>
     </div>
-    <div class="player-song-meta">
-      <div class="player-now-playing-row">
-        <div class="equalizer-bars" id="equalizer-bars">
-          <span></span><span></span><span></span><span></span>
-        </div>
-        <p class="player-song-title" id="now-playing-title">No song selected</p>
-      </div>
-      <p class="player-song-artist" id="now-playing-artist"></p>
-    </div>
-    <div class="player-like-area">
-      <button class="player-icon-btn like-btn" id="player-like-btn" aria-label="Save to Liked Songs">
-        <i class="fa-regular fa-heart"></i>
-      </button>
-    </div>
+    <span id="topbar-username"></span>
+    <button id="topbar-back"></button>
+    <button id="topbar-forward"></button>
+    <button id="create-playlist-quick-btn"></button>
+    <button id="create-first-playlist-btn"></button>
+    <div id="sidebar-playlists"></div>
+    <div id="queue-btn"></div>
+    <div id="volume-bar-container"><div id="volume-bar-fill"></div><div id="volume-bar-thumb"></div></div>
+    <button id="volume-btn"><i id="volume-icon"></i></button>
+    <div id="player-bar"></div>
   </div>
 
-  <!-- Center: Controls + Progress -->
-  <div class="player-center">
-    <div class="player-controls">
-      <button class="player-icon-btn control-btn" id="shuffle-btn" aria-label="Shuffle" title="Shuffle">
-        <i class="fa-solid fa-shuffle"></i>
-      </button>
-      <button class="player-icon-btn control-btn prev-btn" id="prev-btn" aria-label="Previous">
-        <i class="fa-solid fa-backward-step"></i>
-      </button>
-      <button class="player-icon-btn play-pause-btn" id="play-pause-btn" aria-label="Play">
-        <i class="fa-solid fa-play" id="play-pause-icon"></i>
-      </button>
-      <button class="player-icon-btn control-btn next-btn" id="next-btn" aria-label="Next">
-        <i class="fa-solid fa-forward-step"></i>
-      </button>
-      <button class="player-icon-btn control-btn" id="repeat-btn" aria-label="Repeat" title="Repeat">
-        <i class="fa-solid fa-repeat"></i>
-      </button>
-    </div>
-    <div class="player-progress-row">
-      <span class="player-time" id="current-time">0:00</span>
-      <div class="progress-bar-container" id="progress-bar-container">
-        <div class="progress-bar-track">
-          <div class="progress-bar-fill" id="progress-bar-fill"></div>
-          <div class="progress-bar-thumb" id="progress-bar-thumb"></div>
-        </div>
-      </div>
-      <span class="player-time" id="total-time">0:00</span>
-    </div>
-  </div>
-
-  <!-- Right: Volume + Extra -->
-  <div class="player-right">
-    <button class="player-icon-btn" id="queue-btn" aria-label="Queue" title="Queue">
-      <i class="fa-solid fa-list"></i>
-    </button>
-    <div class="volume-control">
-      <button class="player-icon-btn" id="volume-btn" aria-label="Mute">
-        <i class="fa-solid fa-volume-high" id="volume-icon"></i>
-      </button>
-      <div class="volume-bar-container" id="volume-bar-container">
-        <div class="progress-bar-track">
-          <div class="progress-bar-fill" id="volume-bar-fill" style="width:70%"></div>
-          <div class="progress-bar-thumb" id="volume-bar-thumb" style="left:70%"></div>
-        </div>
-      </div>
-    </div>
-    <button class="player-icon-btn" id="fullscreen-btn" aria-label="Full screen" title="Now Playing View">
-      <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
-    </button>
-  </div>
-
-  <!-- Hidden native audio element -->
+  <!-- Native HTML Audio Element -->
   <audio id="audio-player"></audio>
 
 </div>
 
-<!-- ==================== NOW PLAYING CARD ==================== -->
+<!-- ==================== NOW PLAYING FULLSCREEN / SIMILAR MODAL ==================== -->
 <div id="now-playing-card" class="now-playing-card" style="display:none;">
-
-  <!-- Blurred Background -->
   <div class="npc-bg" id="npc-bg"></div>
-
-  <!-- Card Container -->
-  <div class="npc-container">
-
-    <!-- Header row -->
+  <div class="npc-container neu-master-card">
     <div class="npc-header">
-      <button class="npc-icon-btn" id="npc-close-btn" title="Close">
-        <i class="fa-solid fa-chevron-down"></i>
-      </button>
-      <div class="npc-header-label">
-        <span class="npc-header-from">NOW PLAYING</span>
-      </div>
-      <button class="npc-icon-btn" id="npc-options-btn" title="More options">
-        <i class="fa-solid fa-ellipsis"></i>
-      </button>
+      <button class="neu-action-icon-btn" id="npc-close-btn" title="Close"><i class="fa-solid fa-chevron-down"></i></button>
+      <span class="neu-play-music-title" style="font-size:16px;">Now Playing View</span>
+      <button class="neu-action-icon-btn" id="npc-options-btn"><i class="fa-solid fa-ellipsis"></i></button>
     </div>
-
-    <!-- Album Art -->
-    <div class="npc-artwork-wrap">
-      <div class="npc-artwork" id="npc-artwork">
+    <div class="neu-circular-portal" style="width:240px;height:240px;margin:20px auto;">
+      <div class="neu-portal-well">
         <img id="npc-cover-img" src="" alt="" style="display:none;">
-        <div class="npc-cover-placeholder" id="npc-cover-placeholder">
-          <i class="fa-solid fa-music"></i>
-        </div>
-        <!-- Vinyl ring overlay -->
-        <div class="npc-vinyl-ring"></div>
+        <div class="npc-cover-placeholder" id="npc-cover-placeholder"><i class="fa-solid fa-music"></i></div>
+        <div class="neu-portal-glare"></div>
       </div>
     </div>
-
-    <!-- Song Info -->
-    <div class="npc-song-info">
-      <div class="npc-title-row">
-        <div class="npc-titles">
-          <h2 class="npc-song-title" id="npc-song-title">No song selected</h2>
-          <p class="npc-song-artist" id="npc-song-artist">—</p>
-        </div>
-        <button class="npc-like-btn" id="npc-like-btn" title="Save to Liked Songs">
-          <i class="fa-regular fa-heart"></i>
-        </button>
-      </div>
+    <div style="text-align:center;margin-bottom:16px;">
+      <h2 class="neu-song-title" id="npc-song-title" style="font-size:22px;">No song selected</h2>
+      <p class="neu-song-artist" id="npc-song-artist">—</p>
     </div>
-
-    <!-- Progress Bar -->
-    <div class="npc-progress-section">
-      <div class="npc-progress-bar-wrap" id="npc-progress-container">
-        <div class="npc-progress-track">
-          <div class="npc-progress-fill" id="npc-progress-fill"></div>
-          <div class="npc-progress-thumb" id="npc-progress-thumb"></div>
-        </div>
-      </div>
-      <div class="npc-times">
+    <div class="neu-scrubber-section" id="npc-progress-container">
+      <div class="neu-time-row">
         <span id="npc-current-time">0:00</span>
         <span id="npc-total-time">0:00</span>
       </div>
-    </div>
-
-    <!-- Main Controls -->
-    <div class="npc-controls">
-      <button class="npc-ctrl-btn npc-ctrl-secondary" id="npc-shuffle-btn" title="Shuffle">
-        <i class="fa-solid fa-shuffle"></i>
-      </button>
-      <button class="npc-ctrl-btn npc-ctrl-main" id="npc-prev-btn" title="Previous">
-        <i class="fa-solid fa-backward-step"></i>
-      </button>
-      <button class="npc-ctrl-btn npc-ctrl-play" id="npc-play-pause-btn" title="Play / Pause">
-        <i class="fa-solid fa-play" id="npc-play-pause-icon"></i>
-      </button>
-      <button class="npc-ctrl-btn npc-ctrl-main" id="npc-next-btn" title="Next">
-        <i class="fa-solid fa-forward-step"></i>
-      </button>
-      <button class="npc-ctrl-btn npc-ctrl-secondary" id="npc-repeat-btn" title="Repeat">
-        <i class="fa-solid fa-repeat"></i>
-      </button>
-    </div>
-
-    <!-- Extra Controls Row -->
-    <div class="npc-extra-controls">
-      <button class="npc-extra-btn" id="npc-volume-btn" title="Mute / Unmute">
-        <i class="fa-solid fa-volume-high" id="npc-volume-icon"></i>
-      </button>
-      <div class="npc-volume-wrap" id="npc-volume-container">
-        <div class="npc-progress-track">
-          <div class="npc-progress-fill" id="npc-volume-fill" style="width:70%"></div>
-          <div class="npc-progress-thumb" id="npc-volume-thumb" style="left:70%"></div>
-        </div>
+      <div class="neu-track-well">
+        <div class="neu-track-fill" id="npc-progress-fill"></div>
+        <div class="neu-track-thumb" id="npc-progress-thumb"></div>
       </div>
-      <button class="npc-extra-btn" id="npc-queue-btn" title="Queue">
-        <i class="fa-solid fa-list"></i>
-      </button>
     </div>
-
+    <div class="neu-controls-row" style="margin-top:16px;">
+      <button class="neu-ctrl-pill-btn" id="npc-shuffle-btn"><i class="fa-solid fa-shuffle"></i></button>
+      <button class="neu-ctrl-circle-btn" id="npc-prev-btn"><i class="fa-solid fa-backward-step"></i></button>
+      <button class="neu-play-master-btn" id="npc-play-pause-btn"><div class="neu-play-inner-ring"><i class="fa-solid fa-play" id="npc-play-pause-icon"></i></div></button>
+      <button class="neu-ctrl-circle-btn" id="npc-next-btn"><i class="fa-solid fa-forward-step"></i></button>
+      <button class="neu-ctrl-pill-btn" id="npc-repeat-btn"><i class="fa-solid fa-repeat"></i></button>
+    </div>
+    
     <!-- Songs Like This Section -->
-    <div class="npc-similar-section" id="npc-similar-section">
+    <div class="npc-similar-section" id="npc-similar-section" style="margin-top:24px;">
       <div class="npc-similar-header">
-        <span class="npc-similar-title">
-          <i class="fa-solid fa-wand-magic-sparkles"></i>
-          Songs like this
-        </span>
+        <span class="npc-similar-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Songs like this</span>
         <span class="npc-similar-badge" id="npc-similar-status"></span>
       </div>
-      <div class="npc-similar-list" id="npc-similar-list">
-        <div class="npc-similar-placeholder">
-          <div class="npc-similar-skeleton"></div>
-          <div class="npc-similar-skeleton"></div>
-          <div class="npc-similar-skeleton"></div>
-        </div>
-      </div>
+      <div class="npc-similar-list" id="npc-similar-list"></div>
     </div>
-
   </div>
 </div>
 
-
 <!-- ==================== MODALS ==================== -->
-
 <!-- Create Playlist Modal -->
-<div id="create-playlist-modal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="create-playlist-modal-title">
-  <div class="modal-card">
+<div id="create-playlist-modal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true">
+  <div class="modal-card neu-modal-card">
     <div class="modal-header">
       <h2 id="create-playlist-modal-title">Create Playlist</h2>
       <button class="modal-close-btn" id="close-create-playlist-modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
@@ -776,32 +620,25 @@
     <form id="create-playlist-form">
       <div class="form-group">
         <label for="playlist-name">Playlist name</label>
-        <input type="text" id="playlist-name" placeholder="My Playlist #1" required>
+        <input type="text" id="playlist-name" placeholder="My Favorites" required>
       </div>
       <div class="modal-footer">
         <button type="button" class="ghost-btn" id="cancel-create-playlist">Cancel</button>
-        <button type="submit" class="green-btn">Create</button>
+        <button type="submit" class="neu-btn-pill-accent">Create</button>
       </div>
     </form>
   </div>
 </div>
 
 <!-- Add to Playlist Modal -->
-<div id="add-to-playlist-modal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="add-playlist-modal-title">
-  <div class="modal-card">
+<div id="add-to-playlist-modal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true">
+  <div class="modal-card neu-modal-card">
     <div class="modal-header">
-      <h2 id="add-playlist-modal-title">Add to Playlist</h2>
+      <h2>Add to Playlist</h2>
       <button class="modal-close-btn" id="close-add-to-playlist-modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <div class="form-group" style="display:flex;align-items:center;justify-space-between;gap:10px;">
-      <p class="modal-song-label" id="modal-adding-song-label" style="flex:1;margin:0;"></p>
-      <button type="button" class="green-btn" id="modal-quick-create-playlist-btn" style="padding:6px 14px;font-size:13px;flex-shrink:0;">
-        <i class="fa-solid fa-plus"></i> New Playlist
-      </button>
-    </div>
-    <div id="modal-playlists-list" class="modal-playlist-options">
-      <!-- Populated by JS -->
-    </div>
+    <p class="modal-song-label" id="modal-adding-song-label"></p>
+    <div id="modal-playlists-list" class="modal-playlist-options"></div>
     <div class="modal-footer">
       <button type="button" class="ghost-btn" id="cancel-add-to-playlist">Cancel</button>
     </div>
@@ -809,43 +646,15 @@
   </div>
 </div>
 
-<!-- Queue Modal -->
-<div id="queue-modal" class="modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="queue-modal-title">
-  <div class="modal-card" style="max-width:540px;width:90%;">
-    <div class="modal-header">
-      <h2 id="queue-modal-title"><i class="fa-solid fa-list" style="color:var(--accent);margin-right:8px;"></i> Play Queue</h2>
-      <button class="modal-close-btn" id="close-queue-modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="queue-section" style="margin-bottom:16px;">
-      <p style="font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Now Playing</p>
-      <div id="queue-now-playing" class="songs-table"></div>
-    </div>
-    <div class="queue-section">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-        <p style="font-size:12px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:1px;margin:0;">Next Up</p>
-        <span id="queue-count-badge" style="font-size:11px;color:var(--accent);font-weight:600;"></span>
-      </div>
-      <div id="queue-next-list" class="songs-table" style="max-height:280px;overflow-y:auto;"></div>
-    </div>
-    <div class="modal-footer" style="justify-content:space-between;margin-top:16px;">
-      <button type="button" class="ghost-btn" id="clear-queue-btn" style="color:#e91429;"><i class="fa-solid fa-trash"></i> Clear Queue</button>
-      <button type="button" class="green-btn" id="close-queue-footer-btn">Close</button>
-    </div>
-  </div>
-</div>
-
 <!-- Context Menu -->
 <div id="context-menu" class="context-menu" style="display:none;" role="menu">
   <ul>
     <li><button id="ctx-add-to-playlist" role="menuitem"><i class="fa-solid fa-plus"></i> Add to playlist</button></li>
-    <li><button id="ctx-remove-from-playlist" role="menuitem" style="display:none;"><i class="fa-solid fa-minus"></i> Remove from this playlist</button></li>
-    <li><button id="ctx-like-song" role="menuitem"><i class="fa-regular fa-heart"></i> Save to Liked Songs</button></li>
+    <li><button id="ctx-like-song" role="menuitem"><i class="fa-regular fa-heart"></i> Save to Liked</button></li>
     <li class="context-divider"></li>
     <li><button id="ctx-delete-song" role="menuitem" class="ctx-danger"><i class="fa-solid fa-trash"></i> Delete song</button></li>
   </ul>
 </div>
-
-
 
 <script src="script.js"></script>
 <script src="similar.js"></script>
