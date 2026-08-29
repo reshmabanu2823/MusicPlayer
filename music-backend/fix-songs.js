@@ -53,6 +53,11 @@ const KNOWN_FIXES = {
   "au uu SzH34yR2":          { artist: "Unknown",          title: "Unknown Track" },
   "Cry For Me mixed":        { artist: "Twice",            title: "Cry For Me" },
   "Scared To Live mixed":    { artist: "The Weeknd",       title: "Scared To Live (Mixed)" },
+  "Home Again":              { artist: "Kior",             title: "Home Again" },
+  "On Read":                 { artist: "Kior",             title: "On Read" },
+  "One Call Away":           { artist: "Kior",             title: "One Call Away" },
+  "Take Me Back":            { artist: "Kior",             title: "Take Me Back" },
+  "Those Nights":            { artist: "Kior",             title: "Those Nights" },
 };
 
 function getFixedMeta(filename) {
