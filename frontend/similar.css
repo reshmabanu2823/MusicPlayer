@@ -1,10 +1,10 @@
 /* ══════════════════════════════════════════════════════════════
-   NPC — SONGS LIKE THIS SECTION
+   NPC — SONGS LIKE THIS SECTION (Soft-Sage Neumorphic)
    ══════════════════════════════════════════════════════════════ */
 
 .npc-similar-section {
   margin-top: 24px;
-  border-top: 1px solid rgba(160, 180, 170, 0.3);
+  border-top: 1px solid var(--border-subtle);
   padding-top: 20px;
 }
 
@@ -18,23 +18,23 @@
 .npc-similar-title {
   font-size: 12px;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--text-sub);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 .npc-similar-title i { color: var(--accent); font-size: 12px; }
 
 .npc-similar-badge {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--accent);
-  background: rgba(95, 136, 112, 0.15);
-  border: 1px solid rgba(95, 136, 112, 0.3);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 2px 2px 6px #b4c5be, -2px -2px 6px #ffffff;
   border-radius: 20px;
-  padding: 2px 8px;
+  padding: 3px 10px;
   letter-spacing: 0.5px;
 }
 
@@ -42,42 +42,58 @@
 .npc-similar-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   max-height: 240px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
+  scrollbar-color: rgba(79, 109, 100, 0.25) transparent;
+}
+.npc-similar-list::-webkit-scrollbar { width: 4px; }
+.npc-similar-list::-webkit-scrollbar-thumb {
+  background: rgba(79, 109, 100, 0.25);
+  border-radius: 4px;
 }
 
 /* Individual song card */
 .npc-similar-card {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   padding: 8px 12px;
-  border-radius: var(--radius-md);
-  background: linear-gradient(145deg, var(--neu-card-top), var(--neu-card-bot));
-  box-shadow: 3px 3px 8px var(--shadow-dark), -3px -3px 8px var(--shadow-light);
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
   position: relative;
 }
 .npc-similar-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 5px 5px 12px var(--shadow-dark), -5px -5px 12px var(--shadow-light);
+  background: #e2ece7;
+  transform: translateX(4px);
+  box-shadow: 4px 4px 12px #b0c2bb, -4px -4px 12px #ffffff;
 }
-.npc-similar-card:active { transform: scale(0.98); }
+.npc-similar-card:active {
+  transform: scale(0.98);
+  box-shadow: inset 2px 2px 5px #b0c2bb, inset -2px -2px 5px #ffffff;
+}
 
 /* Cover art */
 .npc-similar-cover-wrap,
 .npc-similar-cover {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 8px;
   flex-shrink: 0;
   overflow: hidden;
   position: relative;
-  box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+  background: #c3d3cc;
+  box-shadow: 3px 3px 7px #abbdb6, -3px -3px 7px #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text-secondary);
 }
 .npc-similar-cover img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -87,12 +103,12 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 .npc-similar-song-title {
   font-size: 13.5px;
   font-weight: 700;
-  color: var(--text-main);
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -100,8 +116,7 @@
 }
 .npc-similar-song-artist {
   font-size: 12px;
-  font-weight: 600;
-  color: var(--text-sub);
+  color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -117,35 +132,35 @@
 }
 .npc-similar-pct {
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 .npc-similar-bar-track {
-  width: 36px;
-  height: 4px;
-  background: var(--neu-bg);
-  box-shadow: inset 1px 1px 3px var(--inset-dark);
-  border-radius: 3px;
+  width: 40px;
+  height: 5px;
+  background: #c2d2cb;
+  border-radius: 5px;
   overflow: hidden;
+  box-shadow: inset 1px 1px 3px #abbdb6, inset -1px -1px 3px #ffffff;
 }
 .npc-similar-bar-fill {
   height: 100%;
   background: var(--accent);
-  border-radius: 3px;
+  border-radius: 5px;
   transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
 }
 
 /* Skeleton loading */
 .npc-similar-placeholder { display: flex; flex-direction: column; gap: 8px; padding: 4px 0; }
 .npc-similar-skeleton {
-  height: 52px;
-  border-radius: 10px;
+  height: 54px;
+  border-radius: 12px;
   background: linear-gradient(
     90deg,
-    rgba(255,255,255,0.04) 0%,
-    rgba(255,255,255,0.08) 50%,
-    rgba(255,255,255,0.04) 100%
+    rgba(255,255,255,0.3) 0%,
+    rgba(255,255,255,0.7) 50%,
+    rgba(255,255,255,0.3) 100%
   );
   background-size: 200% 100%;
   animation: npcSkeletonShimmer 1.6s ease-in-out infinite;
@@ -159,13 +174,14 @@
 .npc-similar-not-ready {
   text-align: center;
   padding: 16px 0 8px;
-  color: rgba(255,255,255,0.3);
-  font-size: 12px;
+  color: var(--text-tertiary);
+  font-size: 13px;
   line-height: 1.6;
 }
 .npc-similar-not-ready i {
   display: block;
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 8px;
-  color: rgba(255,255,255,0.15);
+  color: var(--text-tertiary);
+  opacity: 0.6;
 }

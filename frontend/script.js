@@ -93,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupAuth();
   setupNavigation();
-  setupNeumorphicDrawer();
   setupPlayer();
   setupSearch();
   setupModals();
@@ -564,86 +563,6 @@ function setupNavigation() {
   setupAddSong();
 }
 
-function setupNeumorphicDrawer() {
-  const drawer = document.getElementById("neu-drawer");
-  const openBtn = document.getElementById("drawer-toggle-btn");
-  const closeBtn = document.getElementById("neu-drawer-close");
-  const dockLibraryBtn = document.getElementById("dock-library-btn");
-  const dockHomeBtn = document.getElementById("dock-home-btn");
-  const dockProfileBtn = document.getElementById("dock-profile-btn");
-
-  const openDrawer = () => { if (drawer) drawer.classList.add("open"); };
-  const closeDrawer = () => { if (drawer) drawer.classList.remove("open"); };
-
-  if (openBtn) {
-    openBtn.addEventListener("click", () => {
-      if (drawer) drawer.classList.toggle("open");
-    });
-  }
-  if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
-
-  // Bottom dock buttons
-  if (dockLibraryBtn) {
-    dockLibraryBtn.addEventListener("click", () => {
-      document.querySelectorAll(".neu-dock-btn").forEach(b => b.classList.remove("active"));
-      dockLibraryBtn.classList.add("active");
-      switchDrawerTab("tab-all-songs", "songs-page");
-      loadSongs();
-      openDrawer();
-    });
-  }
-
-  if (dockHomeBtn) {
-    dockHomeBtn.addEventListener("click", () => {
-      document.querySelectorAll(".neu-dock-btn").forEach(b => b.classList.remove("active"));
-      dockHomeBtn.classList.add("active");
-      closeDrawer();
-    });
-  }
-
-  if (dockProfileBtn) {
-    dockProfileBtn.addEventListener("click", () => {
-      document.querySelectorAll(".neu-dock-btn").forEach(b => b.classList.remove("active"));
-      dockProfileBtn.classList.add("active");
-      switchDrawerTab("tab-profile", "profile-page");
-      loadProfile();
-      openDrawer();
-    });
-  }
-
-  // Drawer Tabs
-  const tabs = [
-    { id: "tab-all-songs", page: "songs-page", action: () => { loadSongs(); } },
-    { id: "tab-recent", page: "songs-page", action: () => { const el = document.getElementById("recent-section-block"); if(el) el.scrollIntoView({ behavior: 'smooth'}); } },
-    { id: "tab-playlists", page: "playlists-page", action: () => { loadPlaylists(); } },
-    { id: "tab-genres", page: "search-page", action: () => {} },
-    { id: "tab-upload", page: "add-song-page", action: () => {} },
-    { id: "tab-profile", page: "profile-page", action: () => { loadProfile(); } }
-  ];
-
-  tabs.forEach(t => {
-    const btn = document.getElementById(t.id);
-    if (btn) {
-      btn.addEventListener("click", () => {
-        switchDrawerTab(t.id, t.page);
-        if (t.action) t.action();
-      });
-    }
-  });
-}
-
-function switchDrawerTab(tabId, pageId) {
-  document.querySelectorAll(".neu-tab-btn").forEach(b => b.classList.remove("active"));
-  const activeTab = document.getElementById(tabId);
-  if (activeTab) activeTab.classList.add("active");
-
-  const pages = ["songs-page", "search-page", "add-song-page", "playlists-page", "profile-page", "playlist-detail-page"];
-  pages.forEach(p => {
-    const el = document.getElementById(p);
-    if (el) el.style.display = p === pageId ? "block" : "none";
-  });
-}
-
 function showPage(pageId) {
   const pages = ["songs-page", "search-page", "add-song-page", "playlists-page", "profile-page", "playlist-detail-page"];
   pages.forEach(p => {
@@ -738,9 +657,6 @@ async function loadSongs() {
     state.queue  = [...allSongs];
 
     displaySongsTable(allSongs, "songs-list");
-
-    const badge = document.getElementById("total-songs-count");
-    if (badge) badge.textContent = `${allSongs.length} songs`;
 
     // Featured grid — use local songs for tiles (they're the real library)
     const featuredSource = localSongs.length > 0 ? localSongs : allSongs;
@@ -930,20 +846,20 @@ function setupPlayer() {
   audio.addEventListener("play", () => {
     state.isPlaying = true;
     playPauseIcon.className = "fa-solid fa-pause";
-    // Activate circular portal spin and equalizer animation
-    document.querySelector(".neu-portal-well")?.classList.add("playing");
-    document.querySelector(".neu-portal-container")?.classList.add("playing");
+    // Activate equalizer bars
     const eq = document.getElementById("equalizer-bars");
     if (eq) { eq.classList.add("playing"); eq.classList.remove("paused"); }
+    // Unpause vinyl spin
+    playerBar.classList.remove("paused");
   });
   audio.addEventListener("pause", () => {
     state.isPlaying = false;
     playPauseIcon.className = "fa-solid fa-play";
-    // Freeze circular portal spin and equalizer
-    document.querySelector(".neu-portal-well")?.classList.remove("playing");
-    document.querySelector(".neu-portal-container")?.classList.remove("playing");
+    // Freeze equalizer bars
     const eq = document.getElementById("equalizer-bars");
     if (eq) { eq.classList.add("paused"); }
+    // Pause vinyl spin
+    playerBar.classList.add("paused");
   });
   audio.addEventListener("error", () => {
     showToast("Could not play this track", "error");
@@ -954,26 +870,19 @@ function setupPlayer() {
   progressContainer.addEventListener("mousedown", (e) => { isDraggingProgress = true; seekTo(e); });
   document.addEventListener("mousemove", (e) => { if (isDraggingProgress) seekTo(e); });
   document.addEventListener("mouseup", () => { isDraggingProgress = false; });
-  progressContainer.addEventListener("touchstart", (e) => { isDraggingProgress = true; seekTo(e.touches[0]); }, { passive: true });
-  document.addEventListener("touchmove", (e) => { if (isDraggingProgress) seekTo(e.touches[0]); }, { passive: true });
-  document.addEventListener("touchend", () => { isDraggingProgress = false; });
 
   // Volume bar
-  if (volumeContainer) {
-    let isDraggingVolume = false;
-    volumeContainer.addEventListener("mousedown", (e) => { isDraggingVolume = true; adjustVolume(e); });
-    document.addEventListener("mousemove", (e) => { if (isDraggingVolume) adjustVolume(e); });
-    document.addEventListener("mouseup", () => { isDraggingVolume = false; });
-  }
+  let isDraggingVolume = false;
+  volumeContainer.addEventListener("mousedown", (e) => { isDraggingVolume = true; adjustVolume(e); });
+  document.addEventListener("mousemove", (e) => { if (isDraggingVolume) adjustVolume(e); });
+  document.addEventListener("mouseup", () => { isDraggingVolume = false; });
 
-  if (volumeBtn) {
-    volumeBtn.addEventListener("click", () => {
-      state.isMuted = !state.isMuted;
-      audio.muted = state.isMuted;
-      updateVolumeIcon();
-      showToast(state.isMuted ? "Muted" : "Unmuted");
-    });
-  }
+  volumeBtn.addEventListener("click", () => {
+    state.isMuted = !state.isMuted;
+    audio.muted = state.isMuted;
+    updateVolumeIcon();
+    showToast(state.isMuted ? "Muted" : "Unmuted");
+  });
 
   // Player like button
   playerLikeBtn.addEventListener("click", () => {
@@ -996,23 +905,33 @@ function playSong(index) {
   audio.src = url;
   audio.play().catch(() => showToast("Playback failed. Try another track.", "error"));
 
+  // Remove idle state — player is now active
+  playerBar.classList.remove("player-idle");
+  playerBar.classList.add("player-active");
+
   // Update player UI
   nowPlayingTitle.textContent = song.title;
   nowPlayingArtist.textContent = song.artist;
 
-  // Cover art in circular portal
+  // Cover art — use gradient placeholder based on artist
   playerCoverImg.style.display = "none";
-  const fallback = document.querySelector(".neu-cover-fallback");
+  const placeholder = document.querySelector(".player-cover-placeholder");
   if (song.coverUrl) {
     playerCoverImg.src = song.coverUrl;
     playerCoverImg.style.display = "block";
-    playerCoverImg.onload = () => { if (fallback) fallback.style.display = "none"; };
+    playerCoverImg.onload = () => { if (placeholder) placeholder.style.display = "none"; };
     playerCoverImg.onerror = () => {
       playerCoverImg.style.display = "none";
-      if (fallback) fallback.style.display = "flex";
+      if (placeholder) {
+        placeholder.style.display = "flex";
+        placeholder.innerHTML = getGenerativeCoverHtml(song.title, song.artist, song._id, "mini");
+      }
     };
   } else {
-    if (fallback) fallback.style.display = "flex";
+    if (placeholder) {
+      placeholder.style.display = "flex";
+      placeholder.innerHTML = getGenerativeCoverHtml(song.title, song.artist, song._id, "mini");
+    }
   }
 
   // Like button state
@@ -1025,6 +944,9 @@ function playSong(index) {
     const isActive = row.dataset.songId === String(song._id);
     row.classList.toggle("active", isActive);
   });
+
+  // Show player bar (always visible now, just ensure)
+  playerBar.style.display = "flex";
 
   // Sync Now Playing Card if it's open
   updateNowPlayingCard();
@@ -1063,11 +985,9 @@ function updateProgress() {
 }
 
 function seekTo(e) {
-  if (!progressContainer || !audio.duration) return;
-  const rect = progressContainer.getBoundingClientRect();
+  const rect = progressContainer.querySelector(".progress-bar-track").getBoundingClientRect();
   const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
   audio.currentTime = pct * audio.duration;
-  if (progressFill) progressFill.style.width = `${pct * 100}%`;
 }
 
 function setVolume(vol) {
@@ -2102,11 +2022,11 @@ function setupKeyboardShortcuts() {
    UTILITIES
    ════════════════════════════════════════════════════════════ */
 function formatDuration(seconds) {
-  if (!seconds || isNaN(seconds) || seconds < 0) return "00.00";
+  if (!seconds || isNaN(seconds)) return "";
   const s = Math.floor(seconds);
   const m = Math.floor(s / 60);
   const sec = s % 60;
-  return `${m < 10 ? '0' + m : m}.${sec < 10 ? '0' + sec : sec}`;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
 function escHtml(str) {
@@ -2133,18 +2053,14 @@ function randomGradient(seed) {
 }
 
 const AESTHETIC_PALETTES = [
-  { bg: "linear-gradient(135deg, #FF0844 0%, #FFB199 100%)", text: "#fff", accent: "#ff0844", icon: "fa-fire" },
-  { bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", text: "#fff", accent: "#764ba2", icon: "fa-compact-disc" },
-  { bg: "linear-gradient(135deg, #0ba360 0%, #3cba92 100%)", text: "#fff", accent: "#0ba360", icon: "fa-bolt" },
-  { bg: "linear-gradient(135deg, #f857a6 0%, #ff5858 100%)", text: "#fff", accent: "#f857a6", icon: "fa-heart" },
-  { bg: "linear-gradient(135deg, #2af598 0%, #009efd 100%)", text: "#fff", accent: "#009efd", icon: "fa-headphones" },
-  { bg: "linear-gradient(135deg, #b224ef 0%, #7579ff 100%)", text: "#fff", accent: "#b224ef", icon: "fa-wave-square" },
-  { bg: "linear-gradient(135deg, #f77062 0%, #fe5196 100%)", text: "#fff", accent: "#fe5196", icon: "fa-music" },
-  { bg: "linear-gradient(135deg, #13547a 0%, #80d0c7 100%)", text: "#fff", accent: "#80d0c7", icon: "fa-radio" },
-  { bg: "linear-gradient(135deg, #f12711 0%, #f5af19 100%)", text: "#fff", accent: "#f12711", icon: "fa-guitar" },
-  { bg: "linear-gradient(135deg, #8a2387 0%, #e94057 50%, #f27121 100%)", text: "#fff", accent: "#e94057", icon: "fa-compact-disc" },
-  { bg: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)", text: "#fff", accent: "#11998e", icon: "fa-music" },
-  { bg: "linear-gradient(135deg, #fc466b 0%, #3f5efb 100%)", text: "#fff", accent: "#3f5efb", icon: "fa-sliders" }
+  { bg: "linear-gradient(135deg, #c4d7d0 0%, #8ca99f 100%)", text: "#233530", accent: "#4b665e", icon: "fa-leaf" },
+  { bg: "linear-gradient(135deg, #d3e2dc 0%, #9cb8ae 100%)", text: "#233530", accent: "#4b665e", icon: "fa-compact-disc" },
+  { bg: "linear-gradient(135deg, #b8ccc4 0%, #6f8f85 100%)", text: "#ffffff", accent: "#3b524b", icon: "fa-music" },
+  { bg: "linear-gradient(135deg, #dce8e3 0%, #a8c4bb 100%)", text: "#233530", accent: "#4b665e", icon: "fa-headphones" },
+  { bg: "linear-gradient(135deg, #abc3ba 0%, #76958b 100%)", text: "#ffffff", accent: "#3b524b", icon: "fa-wave-square" },
+  { bg: "linear-gradient(135deg, #cad8d2 0%, #94b0a6 100%)", text: "#233530", accent: "#4b665e", icon: "fa-guitar" },
+  { bg: "linear-gradient(135deg, #b0c7bf 0%, #67867c 100%)", text: "#ffffff", accent: "#3b524b", icon: "fa-radio" },
+  { bg: "linear-gradient(135deg, #dae7e1 0%, #a1bfb5 100%)", text: "#233530", accent: "#4b665e", icon: "fa-sliders" }
 ];
 
 function getAestheticPalette(seed) {
