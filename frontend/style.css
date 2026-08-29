@@ -1683,18 +1683,26 @@ input:focus, select:focus {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   NOW PLAYING CARD MODAL (Exact theme of user mockup)
+   NOW PLAYING CARD MODAL (Exact match for HTML & Mockup)
    ═══════════════════════════════════════════════════════════ */
-.now-playing-card-modal {
+#now-playing-card, .now-playing-card {
   position: fixed;
   inset: 0;
-  background: rgba(198, 213, 207, 0.75);
-  backdrop-filter: blur(16px);
-  z-index: 1000;
+  background: rgba(198, 213, 207, 0.8);
+  backdrop-filter: blur(18px);
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
+  overflow-y: auto;
+}
+
+.npc-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 40%, rgba(75, 102, 94, 0.15) 0%, transparent 70%);
 }
 
 .npc-container {
@@ -1702,12 +1710,13 @@ input:focus, select:focus {
   max-width: 440px;
   background: linear-gradient(160deg, #e4eee9 0%, #d8e6e0 50%, #cadad3 100%);
   border-radius: var(--radius-xl);
-  box-shadow: 18px 22px 45px rgba(30, 52, 45, 0.28), -16px -16px 36px #ffffff;
+  box-shadow: 20px 24px 50px rgba(30, 52, 45, 0.3), -16px -16px 36px #ffffff;
   border: 2px solid var(--border-light);
   padding: 28px 24px 32px;
   display: flex;
   flex-direction: column;
   position: relative;
+  z-index: 2;
   animation: npcPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 @keyframes npcPop {
@@ -1715,16 +1724,24 @@ input:focus, select:focus {
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.npc-top-header {
+.npc-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
-  position: relative;
+}
+.npc-header-label {
+  text-align: center;
+}
+.npc-header-from {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: var(--text-primary);
+  text-transform: uppercase;
 }
 
-/* Neumorphic Octagonal / Squircle Badges (from reference mockup) */
-.npc-badge-icon {
+.npc-icon-btn {
   width: 44px;
   height: 44px;
   border-radius: 14px;
@@ -1735,31 +1752,15 @@ input:focus, select:focus {
   align-items: center;
   justify-content: center;
   color: var(--text-primary);
-  font-size: 16px;
-}
-.npc-header-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--text-primary);
-  letter-spacing: -0.3px;
-}
-.npc-close-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-neu-btn);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-primary);
-  font-size: 18px;
+  font-size: 17px;
   transition: all var(--transition-fast);
 }
-.npc-close-btn:hover {
-  transform: scale(1.05);
+.npc-icon-btn:hover {
+  transform: scale(1.06);
   box-shadow: var(--shadow-neu-hover);
+}
+.npc-icon-btn:active {
+  box-shadow: var(--shadow-neu-press);
 }
 
 /* Circular Center Album Art with Beveled Concave Frame */
@@ -1777,58 +1778,62 @@ input:focus, select:focus {
   justify-content: center;
   position: relative;
 }
-.npc-artwork-inner {
+.npc-artwork {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 8px 20px rgba(75, 102, 94, 0.35);
+  box-shadow: 0 8px 20px rgba(45, 72, 63, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.npc-artwork-inner img {
+.npc-artwork img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 }
-
-/* Floating Badges overlaying the album art (like mockup) */
-.npc-float-badge-1 {
-  position: absolute;
-  top: 14px;
-  right: -8px;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: var(--bg-elevated);
-  box-shadow: var(--shadow-neu-btn);
-  border: 1px solid var(--border-light);
+.npc-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg-sunken);
+  box-shadow: var(--shadow-neu-inner);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 52px;
   color: var(--text-secondary);
-  font-size: 15px;
-}
-.npc-float-badge-2 {
-  position: absolute;
-  bottom: 24px;
-  right: -10px;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: var(--bg-elevated);
-  box-shadow: var(--shadow-neu-btn);
-  border: 1px solid var(--border-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  font-size: 14px;
 }
 
-/* Titles */
-.npc-titles {
-  text-align: center;
+/* Spinning Vinyl animation */
+.npc-artwork.spinning img {
+  animation: vinylSpin 20s linear infinite;
+}
+.npc-artwork.paused-spin img {
+  animation-play-state: paused;
+}
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Song Info */
+.npc-song-info {
   margin-bottom: 22px;
+}
+.npc-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.npc-titles {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
 }
 .npc-song-title {
   font-size: 22px;
@@ -1836,66 +1841,159 @@ input:focus, select:focus {
   color: var(--text-primary);
   letter-spacing: -0.3px;
   margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .npc-song-artist {
   font-size: 15px;
   font-weight: 600;
   color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
-/* Progress in NPC */
-.npc-progress-section {
-  margin-bottom: 24px;
-}
-.npc-time-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--text-secondary);
-  margin-bottom: 6px;
-}
-
-/* Controls Cluster */
-.npc-controls-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 28px;
-}
-
-/* Bottom Mockup Dock (Music, Home, Profile squircle tabs) */
-.npc-bottom-dock {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding-top: 18px;
-  border-top: 1px solid var(--border-mid);
-}
-.npc-dock-btn {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
+.npc-like-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   background: var(--bg-elevated);
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-neu-btn);
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--text-secondary);
   font-size: 18px;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+.npc-like-btn:hover {
+  color: var(--accent);
+  transform: scale(1.08);
+  box-shadow: var(--shadow-neu-hover);
+}
+.npc-like-btn.liked {
+  color: var(--accent);
+  box-shadow: var(--shadow-neu-press);
+}
+.npc-like-btn.liked i { font-weight: 900; }
+
+/* Progress in NPC */
+.npc-progress-section {
+  margin-bottom: 24px;
+}
+.npc-progress-bar-wrap {
+  cursor: pointer;
+  padding: 8px 0;
+}
+.npc-progress-track {
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: var(--radius-full);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-neu-inner);
+}
+.npc-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: var(--radius-full);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+.npc-times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* Controls Cluster */
+.npc-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.npc-ctrl-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-neu-btn);
+  transition: all var(--transition-fast);
+}
+.npc-ctrl-btn:hover {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-neu-hover);
+}
+.npc-ctrl-btn:active {
+  box-shadow: var(--shadow-neu-press);
+}
+.npc-ctrl-btn.active {
+  color: var(--accent);
+  box-shadow: var(--shadow-neu-press);
+}
+.npc-ctrl-secondary {
+  width: 42px;
+  height: 42px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.npc-ctrl-main {
+  width: 48px;
+  height: 48px;
+  font-size: 18px;
+}
+.npc-ctrl-play {
+  width: 58px;
+  height: 58px;
+  font-size: 22px;
+  background: linear-gradient(145deg, #e8f3ee, #c7d8d1);
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 6px 10px 22px rgba(35, 60, 52, 0.3), -6px -6px 18px #ffffff;
+}
+.npc-ctrl-play:hover {
+  transform: scale(1.08);
+  box-shadow: 8px 14px 28px rgba(30, 52, 45, 0.38), -8px -8px 22px #ffffff;
+}
+
+/* Extra Controls Row */
+.npc-extra-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+}
+.npc-extra-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-neu-btn);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
   color: var(--text-secondary);
   transition: all var(--transition-fast);
 }
-.npc-dock-btn:hover {
-  transform: translateY(-2px);
+.npc-extra-btn:hover {
   color: var(--text-primary);
-  box-shadow: var(--shadow-neu-hover);
+  transform: scale(1.08);
 }
-.npc-dock-btn.active {
-  color: var(--accent);
-  box-shadow: var(--shadow-neu-press);
+.npc-volume-wrap {
+  flex: 1;
+  cursor: pointer;
+  padding: 6px 0;
 }
 
 /* ── MODALS & OVERLAYS ──────────────────────────────────────── */

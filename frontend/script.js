@@ -2233,6 +2233,10 @@ function setupNowPlayingCard() {
   const fsBtn = document.getElementById("fullscreen-btn");
   if (fsBtn) fsBtn.addEventListener("click", openNowPlayingCard);
 
+  /* Open also when clicking player bar cover art or track title */
+  document.getElementById("player-cover-art")?.addEventListener("click", openNowPlayingCard);
+  document.querySelector(".player-song-meta")?.addEventListener("click", openNowPlayingCard);
+
   /* ── Close ─── */
   document.getElementById("npc-close-btn")?.addEventListener("click", closeNowPlayingCard);
 
