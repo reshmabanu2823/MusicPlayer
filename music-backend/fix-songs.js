@@ -64,8 +64,8 @@ function getFixedMeta(filename) {
 }
 
 async function fixSongs() {
-  console.log("\n🔧  Musicify Song Fixer");
-  console.log("=======================\n");
+  console.log("\n🔧  Lumina Song Fixer");
+  console.log("====================\n");
 
   await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/musicDB");
   console.log("✅  MongoDB connected\n");

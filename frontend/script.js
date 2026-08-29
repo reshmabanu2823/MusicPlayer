@@ -1,6 +1,6 @@
 /* ============================================================
-   MUSICIFY — script.js
-   Full Spotify-like logic with bug fixes
+   LUMINA — script.js
+   Aesthetic Music Streaming Experience
    ============================================================ */
 
 // API base — if the page is served from localhost (via the Node server),

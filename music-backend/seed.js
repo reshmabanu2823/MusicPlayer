@@ -49,8 +49,8 @@ function parseFilename(filename) {
 }
 
 async function seed() {
-  console.log("\n🌱  Musicify Song Seeder");
-  console.log("========================\n");
+  console.log("\n🌱  Lumina Song Seeder");
+  console.log("=====================\n");
 
   /* Connect to MongoDB */
   try {

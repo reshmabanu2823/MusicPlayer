@@ -46,7 +46,7 @@ app.use("/api/songs", similarRoutes);   // GET /api/songs/:id/similar
 
 /* ─── Health check ───────────────────────────────────────────── */
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "Musicify backend is running ✓" });
+  res.json({ status: "ok", message: "Lumina backend is running ✓" });
 });
 
 /* ─── Global error handler ───────────────────────────────────── */
@@ -56,9 +56,9 @@ app.use((err, req, res, next) => {
 });
 
 /* ─── Start server ───────────────────────────────────────────── */
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3050;
 app.listen(PORT, () => {
-  console.log(`\n✅  Musicify backend running on  http://localhost:${PORT}`);
+  console.log(`\n✅  Lumina backend running on    http://localhost:${PORT}`);
   console.log(`🎵  Frontend available at        http://localhost:${PORT}`);
   console.log(`❤️   Health check                http://localhost:${PORT}/api/health\n`);
 });

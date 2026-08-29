@@ -1,8 +1,8 @@
 @echo off
-title Musicify — Starting Server
+title Lumina — Starting Server
 echo.
 echo  ==============================================
-echo    MUSICIFY — Music Streaming App
+echo    LUMINA — Aesthetic Music Streaming
 echo  ==============================================
 echo.
 
@@ -36,7 +36,7 @@ if %errorlevel% neq 0 (
 )
 
 :: Start the backend server and open the browser
-echo  [INFO] Starting Musicify server...
+echo  [INFO] Starting Lumina server...
 echo  [INFO] Frontend will be available at: http://localhost:3050
 echo.
 cd music-backend

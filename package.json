@@ -1,7 +1,7 @@
 {
-  "name": "musicify",
+  "name": "lumina",
   "version": "1.0.0",
-  "description": "Musicify — Spotify-clone music streaming app",
+  "description": "Lumina — Aesthetic music streaming web application",
   "scripts": {
     "start": "cd music-backend && node server.js",
     "dev": "cd music-backend && npx nodemon server.js",
