@@ -18,33 +18,33 @@
   --bg-sunken:        #c2d2cb;   /* Deep Sunken Wells */
   --bg-input:         #c6d6cf;   /* Sunken Input Track */
 
-  /* Deep Eucalyptus & Slate Sage Accents */
-  --accent:           #4b665e;   /* Deep Slate Forest Eucalyptus */
-  --accent-bright:    #3b524b;   /* Darker Active State */
-  --accent-dim:       #6a887f;   /* Medium Muted Accent */
-  --accent-glow:      rgba(75, 102, 94, 0.25);
-  --accent-soft:      #5d7d74;
+  /* Deep Eucalyptus, Forest & Pine Accents */
+  --accent:           #3a554c;   /* Rich Deep Forest Eucalyptus */
+  --accent-bright:    #2a423a;   /* Dark Pine Active State */
+  --accent-dim:       #5d7d73;   /* Medium Muted Forest Accent */
+  --accent-glow:      rgba(45, 72, 63, 0.3);
+  --accent-soft:      #4c6c62;
 
   /* Crisp Typography Colors for Light/Sage Canvas */
-  --text-primary:     #233530;   /* Deep Slate Forest Charcoal */
-  --text-secondary:   #556e66;   /* Medium Slate Sage */
-  --text-tertiary:    #7e978f;   /* Muted Pale Slate Sage */
+  --text-primary:     #1e2f2a;   /* Crisp Dark Pine Forest */
+  --text-secondary:   #49635b;   /* Medium Slate Forest Sage */
+  --text-tertiary:    #748f86;   /* Muted Pale Slate Sage */
   --text-inverse:     #ffffff;   /* Pure White Text for Dark Pills */
 
   /* Subtle Borders & Bevel Highlights */
-  --border-subtle:    rgba(255, 255, 255, 0.65);
-  --border-mid:       rgba(155, 178, 170, 0.4);
-  --border-light:     rgba(255, 255, 255, 0.85);
+  --border-subtle:    rgba(255, 255, 255, 0.7);
+  --border-mid:       rgba(95, 128, 118, 0.28);
+  --border-light:     rgba(255, 255, 255, 0.9);
 
-  /* Neumorphic Shadow Matrices */
-  --shadow-neu-outer: 12px 12px 26px #abbdb6, -12px -12px 26px #ffffff;
-  --shadow-neu-card:  10px 10px 22px #abbdb6, -10px -10px 22px #ffffff;
-  --shadow-neu-hover: 14px 14px 30px #a2b5ae, -14px -14px 30px #ffffff;
-  --shadow-neu-inner: inset 4px 4px 8px #a8bbb3, inset -4px -4px 8px #ffffff;
-  --shadow-neu-btn:   6px 6px 14px #b0c2bb, -6px -6px 14px #ffffff;
-  --shadow-neu-press: inset 3px 3px 7px #abbdb6, inset -3px -3px 7px #ffffff;
-  --shadow-neu-sm:    4px 4px 10px #b2c4bd, -4px -4px 10px #ffffff;
-  --shadow-glow:      0 0 35px rgba(255, 255, 255, 0.7), 0 15px 35px rgba(135, 158, 150, 0.35);
+  /* Rich Dark-Green Shaded Neumorphic Matrices */
+  --shadow-neu-outer: 12px 14px 30px rgba(45, 72, 63, 0.2), -12px -12px 28px #ffffff;
+  --shadow-neu-card:  8px 12px 24px rgba(45, 72, 63, 0.18), -8px -8px 22px #ffffff;
+  --shadow-neu-hover: 14px 18px 36px rgba(35, 60, 52, 0.26), -12px -12px 30px #ffffff;
+  --shadow-neu-inner: inset 4px 4px 9px rgba(45, 72, 63, 0.2), inset -4px -4px 9px #ffffff;
+  --shadow-neu-btn:   5px 7px 16px rgba(45, 72, 63, 0.2), -5px -5px 14px #ffffff;
+  --shadow-neu-press: inset 3px 3px 7px rgba(35, 60, 52, 0.28), inset -3px -3px 7px #ffffff;
+  --shadow-neu-sm:    3px 4px 10px rgba(45, 72, 63, 0.16), -3px -3px 8px #ffffff;
+  --shadow-glow:      0 0 35px rgba(255, 255, 255, 0.8), 0 16px 36px rgba(45, 72, 63, 0.28);
 
   /* Layout Dimensions */
   --player-height:    94px;
@@ -823,7 +823,7 @@ input:focus, select:focus {
 /* Page gradient headers */
 .page-gradient-header {
   padding: 44px 32px 28px;
-  background: linear-gradient(180deg, #c7dcd4 0%, rgba(220, 231, 226, 0) 100%);
+  background: linear-gradient(180deg, rgba(46, 75, 65, 0.22) 0%, rgba(58, 88, 77, 0.1) 50%, rgba(220, 231, 226, 0) 100%);
   position: relative;
 }
 
@@ -833,19 +833,20 @@ input:focus, select:focus {
   margin-bottom: 24px;
   letter-spacing: -0.6px;
   color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 /* Featured Tiles (Good evening tiles) */
 .featured-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 .featured-tile {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: var(--bg-elevated);
+  background: linear-gradient(145deg, #e4eee9 0%, #d3e2dc 100%);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -860,7 +861,7 @@ input:focus, select:focus {
 .featured-tile:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-neu-hover);
-  background: var(--bg-card-hover);
+  background: linear-gradient(145deg, #ebf5f0 0%, #cde0d8 100%);
 }
 .featured-tile-cover {
   width: 68px;
@@ -871,7 +872,7 @@ input:focus, select:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 2px 0 8px rgba(171, 189, 182, 0.4);
+  box-shadow: 3px 0 10px rgba(35, 60, 52, 0.18);
 }
 .featured-tile-title {
   flex: 1;
@@ -895,7 +896,7 @@ input:focus, select:focus {
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  box-shadow: 0 6px 16px rgba(75, 102, 94, 0.4);
+  box-shadow: 0 6px 16px rgba(35, 60, 52, 0.45);
   opacity: 0;
   transform: scale(0.8);
   transition: all var(--transition-fast);
@@ -936,7 +937,7 @@ input:focus, select:focus {
   gap: 24px;
 }
 .song-album-card {
-  background: var(--bg-elevated);
+  background: linear-gradient(155deg, #e4eee8 0%, #d6e4de 60%, #c9dbd3 100%);
   border: 2px solid var(--border-light);
   border-radius: var(--radius-lg);
   padding: 16px;
@@ -947,7 +948,7 @@ input:focus, select:focus {
   box-shadow: var(--shadow-neu-card);
 }
 .song-album-card:hover {
-  background: var(--bg-card-hover);
+  background: linear-gradient(155deg, #edf7f2 0%, #dce9e3 60%, #cbdcd5 100%);
   transform: translateY(-6px);
   box-shadow: var(--shadow-neu-hover);
 }
@@ -958,7 +959,7 @@ input:focus, select:focus {
   margin-bottom: 16px;
   position: relative;
   overflow: hidden;
-  box-shadow: 4px 4px 12px #abbdb6, -4px -4px 12px #ffffff;
+  box-shadow: 4px 6px 14px rgba(35, 60, 52, 0.22), -4px -4px 12px #ffffff;
 }
 .song-album-card-title {
   font-size: 15.5px;
@@ -1486,14 +1487,14 @@ input:focus, select:focus {
   left: 0;
   right: 0;
   height: var(--player-height);
-  background: var(--bg-elevated);
+  background: linear-gradient(180deg, #e4eee9 0%, #d6e5df 40%, #cad8d2 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 28px;
   gap: 20px;
   border-top: 2px solid var(--border-light);
-  box-shadow: 0 -8px 24px rgba(171, 189, 182, 0.35);
+  box-shadow: 0 -10px 30px rgba(35, 60, 52, 0.22);
   z-index: 500;
   overflow: hidden;
 }
@@ -1512,7 +1513,7 @@ input:focus, select:focus {
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
-  box-shadow: 4px 4px 10px #abbdb6, -4px -4px 10px #ffffff;
+  box-shadow: 4px 6px 14px rgba(35, 60, 52, 0.22), -4px -4px 10px #ffffff;
   border: 2px solid var(--border-light);
 }
 .player-cover-art img { width: 100%; height: 100%; object-fit: cover; }
@@ -1592,22 +1593,22 @@ input:focus, select:focus {
 
 /* Central Play/Pause button with double ring (like reference image) */
 .play-pause-btn {
-  width: 48px !important;
-  height: 48px !important;
-  background: var(--bg-elevated) !important;
+  width: 50px !important;
+  height: 50px !important;
+  background: linear-gradient(145deg, #e8f3ee, #c7d8d1) !important;
   border-radius: 50% !important;
   color: var(--text-primary) !important;
-  font-size: 18px !important;
-  border: 3px solid rgba(255, 255, 255, 0.9) !important;
-  box-shadow: 6px 6px 16px #abbdb6, -6px -6px 16px #ffffff !important;
+  font-size: 19px !important;
+  border: 3px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 6px 8px 18px rgba(35, 60, 52, 0.28), -6px -6px 16px #ffffff !important;
   transition: all var(--transition-fast) !important;
 }
 .play-pause-btn:hover {
   transform: scale(1.08) !important;
-  box-shadow: 8px 8px 20px #a4b7af, -8px -8px 20px #ffffff !important;
+  box-shadow: 8px 12px 24px rgba(30, 52, 45, 0.35), -8px -8px 22px #ffffff !important;
 }
 .play-pause-btn:active {
-  box-shadow: inset 4px 4px 8px #abbdb6, inset -4px -4px 8px #ffffff !important;
+  box-shadow: inset 4px 5px 9px rgba(35, 60, 52, 0.3), inset -4px -4px 9px #ffffff !important;
 }
 
 /* Progress Bar & Sunken Track */
@@ -1654,7 +1655,7 @@ input:focus, select:focus {
   border-radius: 50%;
   background: var(--bg-elevated);
   border: 2px solid var(--accent);
-  box-shadow: 2px 2px 5px #a6b8b0;
+  box-shadow: 2px 2px 5px rgba(35, 60, 52, 0.3);
   display: none;
 }
 .progress-bar-container:hover .progress-bar-thumb { display: block; }
@@ -1687,7 +1688,7 @@ input:focus, select:focus {
 .now-playing-card-modal {
   position: fixed;
   inset: 0;
-  background: rgba(198, 213, 207, 0.7);
+  background: rgba(198, 213, 207, 0.75);
   backdrop-filter: blur(16px);
   z-index: 1000;
   display: flex;
@@ -1699,9 +1700,9 @@ input:focus, select:focus {
 .npc-container {
   width: 100%;
   max-width: 440px;
-  background: var(--bg-elevated);
+  background: linear-gradient(160deg, #e4eee9 0%, #d8e6e0 50%, #cadad3 100%);
   border-radius: var(--radius-xl);
-  box-shadow: 16px 16px 36px #a4b7af, -16px -16px 36px #ffffff;
+  box-shadow: 18px 22px 45px rgba(30, 52, 45, 0.28), -16px -16px 36px #ffffff;
   border: 2px solid var(--border-light);
   padding: 28px 24px 32px;
   display: flex;
@@ -1768,9 +1769,9 @@ input:focus, select:focus {
   margin: 0 auto 24px;
   border-radius: 50%;
   padding: 12px;
-  background: var(--bg-elevated);
-  border: 3px solid rgba(255, 255, 255, 0.9);
-  box-shadow: inset 8px 8px 16px #abbdb6, inset -8px -8px 16px #ffffff, 8px 8px 24px #abbdb6;
+  background: linear-gradient(145deg, #e4eee8, #c8d8d1);
+  border: 3px solid rgba(255, 255, 255, 0.95);
+  box-shadow: inset 8px 10px 20px rgba(35, 60, 52, 0.26), inset -8px -8px 16px #ffffff, 8px 14px 28px rgba(35, 60, 52, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
