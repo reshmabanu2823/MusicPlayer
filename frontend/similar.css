@@ -73,6 +73,7 @@
 .npc-similar-card:active { transform: scale(0.98); }
 
 /* Cover art */
+.npc-similar-cover-wrap,
 .npc-similar-cover {
   width: 40px;
   height: 40px;

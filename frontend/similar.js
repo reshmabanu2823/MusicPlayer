@@ -57,15 +57,11 @@ async function fetchSimilarSongs(songId, limit = 8) {
  * Clicking the card plays the song and refreshes the similar list.
  */
 function buildSimilarCard(song) {
-  // Deterministic gradient per song (no album art support yet)
-  const gradients = [
-    "linear-gradient(135deg,#1db954,#0d6e32)",
-    "linear-gradient(135deg,#7c3aed,#3b82f6)",
-    "linear-gradient(135deg,#e91429,#f5a623)",
-    "linear-gradient(135deg,#0ea5e9,#7c3aed)",
-    "linear-gradient(135deg,#f59e0b,#e91429)",
-  ];
-  const gi = song._id.split("").reduce((a, c) => a + c.charCodeAt(0), 0) % gradients.length;
+  const localSong = state.songs.find(s => String(s._id) === String(song._id));
+  const fullSong = { ...song, coverUrl: song.coverUrl || (localSong ? localSong.coverUrl : null) };
+  const coverHtml = typeof getSongCoverHtml === "function"
+    ? getSongCoverHtml(fullSong, "mini")
+    : `<div class="npc-similar-cover"><i class="fa-solid fa-music"></i></div>`;
 
   const card = document.createElement("div");
   card.className   = "npc-similar-card";
@@ -75,12 +71,8 @@ function buildSimilarCard(song) {
   card.setAttribute("aria-label", `Play ${song.title} by ${song.artist}`);
 
   card.innerHTML = `
-    <div class="npc-similar-cover"
-         style="${song.coverUrl ? "" : `background:${gradients[gi]}`}">
-      ${song.coverUrl
-        ? `<img src="${song.coverUrl}" alt="" loading="lazy"
-               onerror="this.style.display='none'">`
-        : `<i class="fa-solid fa-music"></i>`}
+    <div class="npc-similar-cover-wrap">
+      ${coverHtml}
     </div>
     <div class="npc-similar-meta">
       <div class="npc-similar-song-title">${escapeHtml(song.title)}</div>

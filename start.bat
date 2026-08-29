@@ -37,12 +37,12 @@ if %errorlevel% neq 0 (
 
 :: Start the backend server and open the browser
 echo  [INFO] Starting Musicify server...
-echo  [INFO] Frontend will be available at: http://localhost:3000
+echo  [INFO] Frontend will be available at: http://localhost:3050
 echo.
 cd music-backend
 
 :: Open browser after a short delay
-start "" /b cmd /c "timeout /t 2 >nul && start http://localhost:3000"
+start "" /b cmd /c "timeout /t 2 >nul && start http://localhost:3050"
 
 :: Start server (this keeps the window open)
 node server.js

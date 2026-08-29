@@ -607,7 +607,7 @@ async function loadSongs() {
             audioUrl: s.file
               ? (s.file.startsWith("http") ? s.file : `${API_BASE}${s.file}`)
               : null,
-            coverUrl: null,
+            coverUrl: s.coverUrl || null,
             isLibrary: false,
           }));
         }
@@ -668,13 +668,16 @@ function buildFeaturedGrid(songs) {
   songs.forEach(song => {
     const tile = document.createElement("div");
     tile.className = "featured-tile";
+    const idx = state.songs.indexOf(song);
+    const coverHtml = getSongCoverHtml(song, "tile");
     tile.innerHTML = `
-      <div class="featured-tile-cover" style="background:${randomGradient(song._id)}">
-        <i class="fa-solid fa-music" style="color:#fff;opacity:0.8;font-size:22px;"></i>
+      <div class="featured-tile-cover">
+        ${coverHtml}
       </div>
-      <span>${escHtml(song.title)}</span>
+      <span class="featured-tile-title" title="${escHtml(song.title)}">${escHtml(song.title)}</span>
+      <div class="featured-tile-play"><i class="fa-solid fa-play"></i></div>
     `;
-    tile.addEventListener("click", () => playSong(state.songs.indexOf(song)));
+    tile.addEventListener("click", () => playSong(idx >= 0 ? idx : 0));
     grid.appendChild(tile);
   });
 }
@@ -687,17 +690,16 @@ function buildRecentRow(songs) {
     const card = document.createElement("div");
     card.className = "song-album-card";
     const idx = state.songs.indexOf(song);
+    const coverHtml = getSongCoverHtml(song, "card");
     card.innerHTML = `
       <div class="song-album-card-cover">
-        ${song.coverUrl
-          ? `<img src="${escHtml(song.coverUrl)}" alt="${escHtml(song.title)}" loading="lazy">`
-          : `<div class="song-album-card-cover-placeholder"><i class="fa-solid fa-music"></i></div>`}
+        ${coverHtml}
         <div class="card-play-overlay"><i class="fa-solid fa-play"></i></div>
       </div>
-      <div class="song-album-card-title">${escHtml(song.title)}</div>
-      <div class="song-album-card-sub">${escHtml(song.artist)}</div>
+      <div class="song-album-card-title" title="${escHtml(song.title)}">${escHtml(song.title)}</div>
+      <div class="song-album-card-sub" title="${escHtml(song.artist)}">${escHtml(song.artist)}</div>
     `;
-    card.addEventListener("click", () => playSong(idx));
+    card.addEventListener("click", () => playSong(idx >= 0 ? idx : 0));
     row.appendChild(card);
   });
 }
@@ -735,15 +737,15 @@ function displaySongsTable(songs, containerId, showDelete = false) {
     if (state.currentIndex === globalIdx) row.classList.add("active");
 
     const isLiked = state.isLiked[song._id];
+    const coverHtml = getSongCoverHtml(song, "row");
+
     row.innerHTML = `
       <div class="song-row-index">
         <span class="song-row-index-num">${localIdx + 1}</span>
         <i class="fa-solid fa-play song-row-play-icon"></i>
       </div>
       <div class="song-row-info">
-        ${song.coverUrl
-          ? `<img class="song-row-cover" src="${escHtml(song.coverUrl)}" alt="" loading="lazy" onerror="this.outerHTML='<div class=\\'song-row-cover-placeholder\\'><i class=\\'fa-solid fa-music\\'></i></div>'">`
-          : `<div class="song-row-cover-placeholder"><i class="fa-solid fa-music"></i></div>`}
+        ${coverHtml}
         <div class="song-row-text">
           <div class="song-row-title">${escHtml(song.title)}</div>
           <div class="song-row-artist">${escHtml(song.artist)}</div>
@@ -907,11 +909,17 @@ function playSong(index) {
     playerCoverImg.src = song.coverUrl;
     playerCoverImg.style.display = "block";
     playerCoverImg.onload = () => { if (placeholder) placeholder.style.display = "none"; };
-    playerCoverImg.onerror = () => { playerCoverImg.style.display = "none"; if (placeholder) placeholder.style.display = "flex"; };
+    playerCoverImg.onerror = () => {
+      playerCoverImg.style.display = "none";
+      if (placeholder) {
+        placeholder.style.display = "flex";
+        placeholder.innerHTML = getGenerativeCoverHtml(song.title, song.artist, song._id, "mini");
+      }
+    };
   } else {
     if (placeholder) {
       placeholder.style.display = "flex";
-      placeholder.style.background = randomGradient(song._id || song.title);
+      placeholder.innerHTML = getGenerativeCoverHtml(song.title, song.artist, song._id, "mini");
     }
   }
 
@@ -1097,17 +1105,16 @@ function renderGenreSegregatedSections() {
       const card = document.createElement("div");
       card.className = "song-album-card";
       const idx = state.songs.indexOf(song);
+      const coverHtml = getSongCoverHtml(song, "card");
       card.innerHTML = `
         <div class="song-album-card-cover">
-          ${song.coverUrl
-            ? `<img src="${escHtml(song.coverUrl)}" alt="${escHtml(song.title)}" loading="lazy">`
-            : `<div class="song-album-card-cover-placeholder"><i class="fa-solid fa-music"></i></div>`}
+          ${coverHtml}
           <div class="card-play-overlay"><i class="fa-solid fa-play"></i></div>
         </div>
-        <div class="song-album-card-title">${escHtml(song.title)}</div>
-        <div class="song-album-card-sub">${escHtml(song.artist)}</div>
+        <div class="song-album-card-title" title="${escHtml(song.title)}">${escHtml(song.title)}</div>
+        <div class="song-album-card-sub" title="${escHtml(song.artist)}">${escHtml(song.artist)}</div>
       `;
-      card.addEventListener("click", () => playSong(idx));
+      card.addEventListener("click", () => playSong(idx >= 0 ? idx : 0));
       row.appendChild(card);
     });
 
@@ -1274,8 +1281,9 @@ function displayPlaylistsGrid(playlists, containerId) {
     const card = document.createElement("div");
     card.className = "playlist-card";
     const count = p.songs ? p.songs.length : 0;
+    const palette = getAestheticPalette(p._id || p.name);
     card.innerHTML = `
-      <div class="playlist-card-cover"><i class="fa-solid fa-music"></i></div>
+      <div class="playlist-card-cover" style="background:${palette.bg}"><i class="fa-solid ${palette.icon || 'fa-music'}"></i></div>
       <div class="playlist-card-name">${escHtml(p.name)}</div>
       <div class="playlist-card-count">${count} song${count !== 1 ? "s" : ""}</div>
       <button class="playlist-card-play-btn" aria-label="Play playlist"><i class="fa-solid fa-play"></i></button>
@@ -1358,7 +1366,7 @@ async function openPlaylistDetail(playlist, autoPlay = false) {
   const mappedSongs = rawSongs.map(s => ({
     ...s,
     audioUrl: s.file ? (s.file.startsWith("http") ? s.file : `${API_BASE}${s.file}`) : null,
-    coverUrl: null,
+    coverUrl: s.coverUrl || null,
   }));
 
   displaySongsTable(mappedSongs, "playlist-songs-list");
@@ -1940,7 +1948,7 @@ async function loadProfile() {
     const mappedSongs = songs.map(s => ({
       ...s,
       audioUrl: s.file ? (s.file.startsWith("http") ? s.file : `${API_BASE}${s.file}`) : null,
-      coverUrl: null,
+      coverUrl: s.coverUrl || null,
     }));
     displaySongsTable(mappedSongs, "profile-songs-list", true);
     displayPlaylistsGrid(playlists, "profile-playlists-list");
@@ -2022,6 +2030,78 @@ function randomGradient(seed) {
   return colors[hash % colors.length];
 }
 
+const AESTHETIC_PALETTES = [
+  { bg: "linear-gradient(135deg, #FF0844 0%, #FFB199 100%)", text: "#fff", accent: "#ff0844", icon: "fa-fire" },
+  { bg: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", text: "#fff", accent: "#764ba2", icon: "fa-compact-disc" },
+  { bg: "linear-gradient(135deg, #0ba360 0%, #3cba92 100%)", text: "#fff", accent: "#0ba360", icon: "fa-bolt" },
+  { bg: "linear-gradient(135deg, #f857a6 0%, #ff5858 100%)", text: "#fff", accent: "#f857a6", icon: "fa-heart" },
+  { bg: "linear-gradient(135deg, #2af598 0%, #009efd 100%)", text: "#fff", accent: "#009efd", icon: "fa-headphones" },
+  { bg: "linear-gradient(135deg, #b224ef 0%, #7579ff 100%)", text: "#fff", accent: "#b224ef", icon: "fa-wave-square" },
+  { bg: "linear-gradient(135deg, #f77062 0%, #fe5196 100%)", text: "#fff", accent: "#fe5196", icon: "fa-music" },
+  { bg: "linear-gradient(135deg, #13547a 0%, #80d0c7 100%)", text: "#fff", accent: "#80d0c7", icon: "fa-radio" },
+  { bg: "linear-gradient(135deg, #f12711 0%, #f5af19 100%)", text: "#fff", accent: "#f12711", icon: "fa-guitar" },
+  { bg: "linear-gradient(135deg, #8a2387 0%, #e94057 50%, #f27121 100%)", text: "#fff", accent: "#e94057", icon: "fa-compact-disc" },
+  { bg: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)", text: "#fff", accent: "#11998e", icon: "fa-music" },
+  { bg: "linear-gradient(135deg, #fc466b 0%, #3f5efb 100%)", text: "#fff", accent: "#3f5efb", icon: "fa-sliders" }
+];
+
+function getAestheticPalette(seed) {
+  const str = String(seed || "music");
+  const hash = str.split("").reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) % 1000003, 0);
+  return AESTHETIC_PALETTES[Math.abs(hash) % AESTHETIC_PALETTES.length];
+}
+
+function getArtistInitials(artist, title) {
+  const target = (artist && artist !== "Unknown Artist" && artist !== "Unknown") ? artist : (title || "M");
+  const words = target.trim().split(/\s+/);
+  if (words.length >= 2) {
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
+  return target.slice(0, 2).toUpperCase();
+}
+
+function getGenerativeCoverHtml(title, artist, seed, size = "card") {
+  const palette = getAestheticPalette(seed || `${artist}-${title}`);
+  const initials = getArtistInitials(artist, title);
+  
+  if (size === "mini" || size === "row") {
+    return `<div class="aesthetic-gen-cover mini" style="background:${palette.bg}">
+      <span class="gen-initials-mini">${escHtml(initials)}</span>
+    </div>`;
+  }
+  
+  if (size === "tile") {
+    return `<div class="aesthetic-gen-cover tile" style="background:${palette.bg}">
+      <i class="fa-solid ${palette.icon}"></i>
+    </div>`;
+  }
+
+  return `<div class="aesthetic-gen-cover ${size}" style="background:${palette.bg}">
+    <div class="gen-vinyl-ring ring-1"></div>
+    <div class="gen-vinyl-ring ring-2"></div>
+    <div class="gen-center-badge">
+      <span class="gen-initials">${escHtml(initials)}</span>
+    </div>
+    <div class="gen-soundwaves">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="gen-gloss"></div>
+  </div>`;
+}
+
+function getSongCoverHtml(song, size = "card") {
+  if (song && song.coverUrl) {
+    const fallbackSeed = song._id || `${song.artist}-${song.title}`;
+    const safeTitle = (song.title || "").replace(/['"]/g, "");
+    const safeArtist = (song.artist || "").replace(/['"]/g, "");
+    return `<div class="aesthetic-cover-wrap ${size}">
+      <img src="${escHtml(song.coverUrl)}" alt="${escHtml(song.title)}" class="aesthetic-cover-img" loading="lazy" onerror="this.parentElement.outerHTML = getGenerativeCoverHtml('${safeTitle}', '${safeArtist}', '${fallbackSeed}', '${size}')">
+      <div class="aesthetic-cover-gloss"></div>
+    </div>`;
+  }
+  return getGenerativeCoverHtml(song ? song.title : "", song ? song.artist : "", song ? (song._id || song.title) : "", size);
+}
+
 /* ════════════════════════════════════════════════════════════
    NOW PLAYING CARD
    ════════════════════════════════════════════════════════════ */
@@ -2078,9 +2158,15 @@ function updateNowPlayingCard() {
     npcCoverImg.src = song.coverUrl;
     npcCoverImg.style.display = "block";
     npcPlaceholder.style.display = "none";
+    npcCoverImg.onerror = () => {
+      npcCoverImg.style.display = "none";
+      npcPlaceholder.style.display = "flex";
+      npcPlaceholder.innerHTML = getGenerativeCoverHtml(song.title, song.artist, song._id, "card");
+    };
   } else {
     npcCoverImg.style.display = "none";
     npcPlaceholder.style.display = "flex";
+    npcPlaceholder.innerHTML = getGenerativeCoverHtml(song.title, song.artist, song._id, "card");
   }
 
   /* Ambient background colours */

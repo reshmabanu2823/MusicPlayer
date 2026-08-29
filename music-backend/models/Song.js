@@ -10,6 +10,7 @@ const songSchema = new mongoose.Schema({
     },
     duration: Number,
     file: String,
+    coverUrl: String,
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"

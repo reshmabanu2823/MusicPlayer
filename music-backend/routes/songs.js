@@ -5,6 +5,7 @@ const Song = require("../models/Song");
 const upload = require("../middleware/upload");
 const getMetadata = require("../utils/metadata");
 const authenticateToken = require("../middleware/auth");
+const fetchArtwork = require("../utils/artwork");
 
 const fs = require("fs");
 const path = require("path");
@@ -28,6 +29,11 @@ router.post("/", authenticateToken, upload.single("file"), async (req, res) => {
             file = `/uploads/${req.file.filename}`;
         }
 
+        let coverUrl = req.body.coverUrl || null;
+        if (!coverUrl) {
+            coverUrl = await fetchArtwork(artist, title);
+        }
+
         const song = new Song({
             title,
             artist,
@@ -35,6 +41,7 @@ router.post("/", authenticateToken, upload.single("file"), async (req, res) => {
             genre: genre || "Pop",
             duration,
             file,
+            coverUrl,
             createdBy: req.user.id
         });
 
@@ -126,12 +133,17 @@ router.post("/upload", authenticateToken, upload.single("song"), async (req, res
         const filePath = req.file.path;
         const metadata = await getMetadata(filePath);
 
+        const title = metadata.title || req.file.originalname;
+        const artist = metadata.artist || "Unknown";
+        const coverUrl = await fetchArtwork(artist, title);
+
         const song = new Song({
-            title: metadata.title || req.file.originalname,
-            artist: metadata.artist || "Unknown",
+            title,
+            artist,
             album: metadata.album || "Unknown",
             duration: metadata.duration,
             file: `/uploads/${req.file.filename}`,
+            coverUrl,
             createdBy: req.user.id
         });
 
