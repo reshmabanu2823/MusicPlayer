@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="similar.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -319,7 +319,47 @@
     <!-- HOME / SONGS PAGE -->
     <div id="songs-page" class="page-section">
       <div class="page-gradient-header" id="songs-header-gradient">
-        <h1 class="page-greeting" id="page-greeting">Good evening</h1>
+        
+        <!-- Claymorphic Hero Card (Reference 1 Inspiration) -->
+        <div class="clay-hero-card" id="clay-hero-card">
+          <div class="hero-top-bar">
+            <span class="hero-month-year" id="hero-month-year">August, 2026</span>
+            <div class="hero-avatar-anchor">
+              <div class="hero-avatar-pill">
+                <i class="fa-solid fa-headphones-simple"></i>
+              </div>
+            </div>
+            <span class="hero-live-clock" id="hero-live-clock">10:30 AM</span>
+          </div>
+
+          <div class="hero-ornament left"><i class="fa-solid fa-snowflake"></i><i class="fa-solid fa-asterisk"></i></div>
+          <div class="hero-ornament right"><i class="fa-solid fa-asterisk"></i><i class="fa-solid fa-snowflake"></i></div>
+
+          <div class="hero-content-center">
+            <p class="hero-day-label" id="hero-day-date">Sunday, 30</p>
+            <div class="hero-email-badge">
+              <span id="hero-email-pill">reshmabanu@lumina.io</span>
+            </div>
+            <h1 class="hero-welcome-title">Welcome Back</h1>
+            <p class="hero-subtitle" id="hero-subtitle">Hello Reshma, what would you like to listen to today?</p>
+          </div>
+
+          <!-- Mini Widgets Strip -->
+          <div class="hero-widgets-strip">
+            <div class="clay-pill-widget weather">
+              <i class="fa-solid fa-cloud-sun"></i>
+              <span class="widget-temp">24°C</span>
+              <span class="widget-status">Serene Acoustics</span>
+            </div>
+            <div class="clay-pill-widget spotlight" id="hero-spotlight-pill">
+              <span class="widget-badge lavender">Featured</span>
+              <span class="widget-title">The Things We Don't Say · Kior</span>
+              <button class="widget-play-btn" id="hero-spotlight-play-btn" title="Quick play"><i class="fa-solid fa-play"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="featured-heading-title" id="page-greeting">Featured Quick-Play</h2>
         <div class="featured-grid" id="featured-grid">
           <!-- Featured quick-access tiles will be inserted by JS -->
         </div>

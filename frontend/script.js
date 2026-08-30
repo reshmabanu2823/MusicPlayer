@@ -139,14 +139,23 @@ function showMainApp() {
   playerBar.style.display = "flex";
   playerBar.classList.add("player-idle");
 
-  const username = localStorage.getItem("userName") || localStorage.getItem("userEmail") || "User";
+  const email = localStorage.getItem("userEmail") || "user@lumina.io";
+  const username = localStorage.getItem("userName") || email;
   const displayName = username.includes("@")
     ? capitalize(username.split("@")[0])
     : capitalize(username);
   document.getElementById("topbar-username").textContent = displayName;
   document.getElementById("profile-avatar-circle").textContent = displayName[0].toUpperCase();
 
+  const emailPill = document.getElementById("hero-email-pill");
+  if (emailPill) emailPill.textContent = email;
+
+  const heroSub = document.getElementById("hero-subtitle");
+  if (heroSub) heroSub.textContent = `Hello ${displayName}, what would you like to listen to today?`;
+
   setGreeting();
+  startHeroClock();
+  setupSpotlightWidget();
   loadSongs();
   loadPlaylistsSidebar();
 }
@@ -156,10 +165,44 @@ function capitalize(str) {
 }
 
 function setGreeting() {
-  const h = new Date().getHours();
+  const now = new Date();
+  const h = now.getHours();
   const greet = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
   const el = document.getElementById("page-greeting");
-  if (el) el.textContent = greet;
+  if (el) el.textContent = `${greet} · Featured Quick-Play`;
+
+  // Update Hero Card Month & Day
+  const monthYear = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+  const dayDate = now.toLocaleDateString("en-US", { weekday: "long", day: "numeric" });
+  const monthEl = document.getElementById("hero-month-year");
+  const dayEl = document.getElementById("hero-day-date");
+  if (monthEl) monthEl.textContent = monthYear;
+  if (dayEl) dayEl.textContent = dayDate;
+}
+
+function startHeroClock() {
+  const updateClock = () => {
+    const clockEl = document.getElementById("hero-live-clock");
+    if (!clockEl) return;
+    const now = new Date();
+    clockEl.textContent = now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+  };
+  updateClock();
+  setInterval(updateClock, 10000);
+}
+
+function setupSpotlightWidget() {
+  const btn = document.getElementById("hero-spotlight-play-btn");
+  const pill = document.getElementById("hero-spotlight-pill");
+  const playSpotlight = () => {
+    // Find Kior track or first available track
+    const kiorIdx = state.songs.findIndex(s => s.artist && s.artist.toLowerCase().includes("kior"));
+    if (kiorIdx >= 0) playSong(kiorIdx);
+    else if (state.songs.length > 0) playSong(0);
+    showToast("Playing Spotlight track: Kior");
+  };
+  if (btn) btn.addEventListener("click", (e) => { e.stopPropagation(); playSpotlight(); });
+  if (pill) pill.addEventListener("click", playSpotlight);
 }
 
 /* ─── Auth Page Switcher ─────────────────────────────────────── */

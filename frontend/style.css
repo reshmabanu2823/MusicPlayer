@@ -239,7 +239,8 @@ img { display: block; max-width: 100%; }
 }
 
 .auth-title {
-  font-size: 26px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 28px;
   font-weight: 800;
   text-align: center;
   letter-spacing: -0.5px;
@@ -830,48 +831,192 @@ input:focus, select:focus {
   padding-bottom: 24px;
 }
 
-/* Page gradient headers */
-.page-gradient-header {
-  padding: 44px 32px 28px;
-  background: linear-gradient(180deg, rgba(46, 75, 65, 0.22) 0%, rgba(58, 88, 77, 0.1) 50%, rgba(220, 231, 226, 0) 100%);
+/* ── CLAYMORPHIC HERO CARD (Reference 1 & 2 Design) ────────── */
+.clay-hero-card {
+  background: linear-gradient(165deg, #eff7f3 0%, #e0ede7 50%, #d2e4dc 100%);
+  border-radius: var(--radius-xl);
+  padding: 32px 36px 28px;
   position: relative;
+  box-shadow: 0 16px 36px -8px rgba(35, 62, 54, 0.22), 0 4px 12px -2px rgba(35, 62, 54, 0.1), inset 0 2px 4px rgba(255, 255, 255, 0.95), inset 0 -3px 6px rgba(45, 75, 65, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  margin-bottom: 32px;
+  overflow: hidden;
 }
 
-.page-greeting {
-  font-size: 34px;
-  font-weight: 900;
-  margin-bottom: 24px;
-  letter-spacing: -0.6px;
-  color: var(--text-primary);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-}
-
-/* Featured Tiles (Good evening tiles) */
-.featured-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px;
-}
-.featured-tile {
+/* Top Meta Bar in Hero Card */
+.hero-top-bar {
   display: flex;
   align-items: center;
-  gap: 14px;
-  background: linear-gradient(145deg, #e4eee9 0%, #d3e2dc 100%);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  font-size: 14.5px;
-  font-weight: 700;
-  height: 68px;
+  justify-content: space-between;
   position: relative;
-  box-shadow: var(--shadow-neu-btn);
+  margin-bottom: 20px;
 }
-.featured-tile:hover {
-  transform: translateY(-3px);
+.hero-month-year, .hero-live-clock {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-neu-sm);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+.hero-avatar-anchor {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -8px;
+}
+.hero-avatar-pill {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #e4eee9, #cbdcd5);
+  border: 3px solid #ffffff;
+  box-shadow: 0 8px 18px rgba(35, 62, 54, 0.22), inset 0 2px 3px #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: 20px;
+}
+
+/* Decorative Ornaments (like image 1) */
+.hero-ornament {
+  position: absolute;
+  top: 36%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--text-tertiary);
+  opacity: 0.35;
+  font-size: 18px;
+  pointer-events: none;
+}
+.hero-ornament.left { left: 24px; }
+.hero-ornament.right { right: 24px; }
+
+/* Hero Center Content */
+.hero-content-center {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.hero-day-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.2px;
+  margin-bottom: 6px;
+}
+.hero-email-badge {
+  display: inline-block;
+  margin-bottom: 12px;
+}
+#hero-email-pill {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.5);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  box-shadow: inset 1px 1px 3px rgba(35, 62, 54, 0.12), inset -1px -1px 3px #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Luxury Editorial Welcome Title */
+.hero-welcome-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
+}
+.hero-subtitle {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Hero Mini Widgets Strip */
+.hero-widgets-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+}
+.clay-pill-widget {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-neu-sm);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+.clay-pill-widget:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-neu-hover);
-  background: linear-gradient(145deg, #ebf5f0 0%, #cde0d8 100%);
+  background: rgba(255, 255, 255, 0.85);
+}
+.clay-pill-widget.weather i { color: #d48806; font-size: 16px; }
+.widget-temp { font-weight: 800; color: var(--text-primary); }
+.widget-status { color: var(--text-secondary); font-size: 12.5px; }
+
+/* Spotlight widget with Lavender Tag (Reference 3) */
+.clay-pill-widget.spotlight { cursor: pointer; }
+.widget-badge.lavender {
+  background: #dedaf0;
+  color: #4e4870;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: inset 0 1px 2px #ffffff;
+}
+.widget-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.widget-play-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  box-shadow: 0 4px 10px rgba(45, 75, 65, 0.35);
+  transition: transform var(--transition-fast);
+}
+.clay-pill-widget.spotlight:hover .widget-play-btn {
+  transform: scale(1.15);
+}
+
+.featured-heading-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--text-primary);
+  margin-bottom: 18px;
 }
 .featured-tile-cover {
   width: 68px;
@@ -927,7 +1072,8 @@ input:focus, select:focus {
   margin-bottom: 18px;
 }
 .section-title {
-  font-size: 26px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 27px;
   font-weight: 800;
   letter-spacing: -0.4px;
   color: var(--text-primary);
@@ -936,9 +1082,18 @@ input:focus, select:focus {
   font-size: 13.5px;
   font-weight: 700;
   color: var(--text-secondary);
-  transition: color var(--transition-fast);
+  background: rgba(255, 255, 255, 0.5);
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-neu-sm);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: all var(--transition-fast);
 }
-.see-all-link:hover { color: var(--accent); text-decoration: underline; }
+.see-all-link:hover {
+  color: var(--accent);
+  transform: translateY(-1px);
+  background: #ffffff;
+}
 
 /* ── RECENTLY PLAYED & SONG ALBUM CARDS ──────────────────────── */
 .cards-row {
@@ -1433,7 +1588,14 @@ input:focus, select:focus {
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
 }
 .playlist-type-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-secondary); }
-.playlist-big-title { font-size: 44px; font-weight: 900; letter-spacing: -1px; margin-top: 4px; color: var(--text-primary); }
+.playlist-big-title, .playlist-detail-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  margin-top: 4px;
+  color: var(--text-primary);
+}
 
 .playlist-actions-bar {
   display: flex;
@@ -1854,10 +2016,11 @@ input:focus, select:focus {
   overflow: hidden;
 }
 .npc-song-title {
-  font-size: 22px;
-  font-weight: 800;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 900;
   color: var(--text-primary);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
   margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
@@ -2041,7 +2204,12 @@ input:focus, select:focus {
   justify-content: space-between;
   margin-bottom: 24px;
 }
-.modal-title { font-size: 22px; font-weight: 800; color: var(--text-primary); }
+.modal-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
 .modal-close-btn {
   width: 36px;
   height: 36px;
