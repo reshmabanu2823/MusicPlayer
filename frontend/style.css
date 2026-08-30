@@ -1018,9 +1018,43 @@ input:focus, select:focus {
   color: var(--text-primary);
   margin-bottom: 18px;
 }
+
+/* Featured Quick-Play Horizontal Grid Alignment */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.featured-tile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(145deg, #e7f1ec 0%, #d4e4dc 100%);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  font-size: 14.5px;
+  font-weight: 700;
+  height: 68px;
+  position: relative;
+  box-shadow: 0 8px 18px -4px rgba(35, 62, 54, 0.18), 0 2px 6px -1px rgba(35, 62, 54, 0.1), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -2px 3px rgba(45, 75, 65, 0.12);
+}
+.featured-tile:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(145deg, #eef7f2 0%, #dcebe3 100%);
+  box-shadow: 0 12px 24px -4px rgba(35, 62, 54, 0.24), 0 4px 10px -1px rgba(35, 62, 54, 0.14), inset 0 2px 3px #ffffff;
+}
+
 .featured-tile-cover {
   width: 68px;
   height: 68px;
+  min-width: 68px;
+  max-width: 68px;
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
@@ -1029,6 +1063,12 @@ input:focus, select:focus {
   justify-content: center;
   box-shadow: 3px 0 10px rgba(35, 60, 52, 0.18);
 }
+.featured-tile-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .featured-tile-title {
   flex: 1;
   white-space: nowrap;
@@ -1037,7 +1077,8 @@ input:focus, select:focus {
   padding-right: 14px;
   color: var(--text-primary);
   font-size: 14.5px;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.2px;
 }
 .featured-tile-play {
   position: absolute;
